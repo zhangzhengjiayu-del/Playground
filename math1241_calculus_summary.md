@@ -1,152 +1,137 @@
-# MATH1241 Calculus 全书详细总结
+# MATH1241 Calculus 知识点详细总结
 
-> 依据：
->
-> - [MATH1231-1241-Calculus-Notes-2020T1.pdf](/Users/apple/Desktop/📖/正学/1241%20calculus/MATH1231-1241-Calculus-Notes-2020T1.pdf)
->
-> 这份总结按这本 notes 的全书结构整理，不再只停留在 Chapter 1。
->
-> 全书主线：
->
-> ```text
-> Chapter 1: functions of several variables
-> Chapter 2: integration techniques
-> Chapter 3: ordinary differential equations
-> Chapter 4: Taylor series, sequences, infinite series, power series
-> Chapter 5: averages, arc length, speed, surface area
-> ```
+这份是直接讲知识点的版本，不是刷题模板，也不是凑行数。
 
-## 1. 这本 Calculus notes 到底在讲什么
+来源对应：
 
-这本书不是一本“单一主题”的 multivariable calculus 讲义。
+- `MATH1231-1241-Calculus-Notes-2020T1.pdf`
+- Chapter 1: Functions of Several Variables
+- Chapter 2: Integration Techniques
+- Chapter 3: Ordinary Differential Equations
+- Chapter 4: Taylor Series
+- Chapter 5: Averages, Arc Length, Speed and Surface Area
 
-它其实把一整学期的 calculus strand 串成了 5 块：
+## 1. Calculus 这本书的整体结构
+
+这本 Calculus notes 有 5 章。
+
+它们不是散的。
+
+它们围绕四个核心思想：
 
 ```text
-1. 多变量微积分入门
-2. 各种积分技巧
-3. 常微分方程
-4. Taylor、多项式近似、数列与级数
-5. 弧长、平均值、速度、表面积
+变化
+累积
+近似
+建模
 ```
 
-所以读这本书时最好不要只按“都会求导积分”来想，而要按下面这条学习逻辑来想：
+Chapter 1 讲多变量函数：
 
 ```text
-先学局部变化怎么描述
--> 再学复杂积分怎么处理
--> 再学变化规律怎么写成 ODE
--> 再学无限过程怎么近似/求和
--> 最后学几个经典几何/物理应用
+一个量同时依赖多个变量时，怎么描述变化？
 ```
 
-一句话总结全书：
+Chapter 2 讲积分技巧：
 
 ```text
-这本 notes 在训练你把“变化、累积、近似、建模”看成同一条 calculus 主线。
+复杂的累积量怎么计算？
 ```
 
-## 2. Chapter 1 总览：Functions of Several Variables
-
-Chapter 1 的目录是：
+Chapter 3 讲 ODE：
 
 ```text
-1.1 Sketching simple surfaces in R^3
-1.2 Partial differentiation
-1.3 Tangent planes to surfaces
-1.4 The total differential approximation
-1.5 Chain rules
-1.6 Functions of more than two variables
+如果已知变化规律，怎么求函数本身？
 ```
 
-这一章是把一元微积分升级成多变量微积分。
+Chapter 4 讲 Taylor series、sequences、series：
 
-以前你学的是：
+```text
+函数和无限过程怎么近似、怎么收敛？
+```
+
+Chapter 5 讲 average、arc length、speed、surface area：
+
+```text
+积分和导数如何解释几何量与物理量？
+```
+
+## 2. Chapter 1: Functions of Several Variables
+
+这一章把一元函数：
 
 ```text
 y = f(x)
 ```
 
-现在你学的是：
+升级成多变量函数：
 
 ```text
-z = f(x, y)
-w = f(x, y, z)
+z = f(x,y)
+w = f(x,y,z)
 ```
 
-问题也升级成：
+以前一个 input 决定 output。
+
+现在多个 input 一起决定 output。
+
+因此“变化率”也不再只有一个方向。
+
+你要问：
 
 ```text
-函数在不同方向怎么变？
-曲面在一点附近能不能用平面近似？
-多个变量之间互相依赖时怎么求导？
+x 方向怎么变？
+y 方向怎么变？
+沿某条路径怎么变？
+所有变量都变时怎么近似？
 ```
 
-### 2.1 Surfaces 和 level curves
+## 3. Surfaces in R^3
 
-对函数：
+二变量函数：
 
 ```text
-z = F(x,y)
+z = f(x,y)
 ```
 
-graph 是 `R^3` 里的 surface。
+图像是三维空间里的 surface。
 
-但直接画 surface 不容易，所以 notes 先用 level curves：
+但三维曲面不好画。
+
+所以 notes 用 level curves 帮你理解。
+
+Level curve 是：
 
 ```text
-F(x,y) = C
+f(x,y) = C
 ```
 
-这就是在 `xy` 平面里的等高线。
+它表示函数值固定为 `C` 的所有点。
 
-最经典例子：
+地理上的等高线就是 level curves 的直觉。
+
+如果：
 
 ```text
-F(x,y) = x^2 + y^2
+f(x,y)=x^2+y^2
 ```
 
-level curves:
+那么 level curves 是：
 
 ```text
 x^2 + y^2 = C
 ```
 
-是圆。
+也就是一圈圈圆。
 
-于是你应该立刻联想到：
+这说明 surface 是一个向上开的碗状 paraboloid。
 
-```text
-这张 surface 是一个 upward opening paraboloid。
-```
+## 4. Partial Derivatives
 
-做 sketch 题时，最好用两步：
+Partial derivative 的意思是：
 
 ```text
-1. 先看 level curves
-2. 再看某个 coordinate plane 截面
-```
-
-例如：
-
-```text
-x = 0
-```
-
-时看 `yz` 截面；
-
-```text
-y = 0
-```
-
-时看 `xz` 截面。
-
-### 2.2 Partial derivatives
-
-偏导的核心意思：
-
-```text
-一次只让一个变量动，其他变量先冻结。
+一次只看一个变量变化，其他变量固定。
 ```
 
 对 `f(x,y)`：
@@ -156,73 +141,89 @@ f_x = ∂f/∂x
 f_y = ∂f/∂y
 ```
 
-意思是：
+`f_x` 表示：
 
 ```text
-f_x: hold y constant
-f_y: hold x constant
+y 固定时，f 对 x 的变化率。
 ```
 
-人话：
+`f_y` 表示：
 
 ```text
-偏导就是“沿 coordinate 方向的变化率”。
+x 固定时，f 对 y 的变化率。
 ```
 
-例如：
+几何上：
 
 ```text
-f(x,y) = x^2 y + sin(xy)
+f_x 是曲面沿 x 方向切片的 slope。
+f_y 是曲面沿 y 方向切片的 slope。
 ```
 
-则：
+注意：
+
+对 `x` 求偏导时，`y` 不是 0，而是 constant。
+
+## 5. Second Partial Derivatives
+
+二阶偏导描述变化率本身如何变化。
+
+常见记号：
 
 ```text
-f_x = 2xy + y cos(xy)
-f_y = x^2 + x cos(xy)
+f_xx
+f_yy
+f_xy
+f_yx
 ```
 
-二阶偏导：
+`f_xy` 的意思是：
 
 ```text
-f_xx, f_yy, f_xy, f_yx
+先对 x 求偏导，再对 y 求偏导。
 ```
 
-如果函数够 nice，通常：
+在函数足够 nice 的情况下：
 
 ```text
 f_xy = f_yx
 ```
 
-### 2.3 Tangent plane
+这不是永远无条件成立，但课程里大多数常见函数都满足。
 
-对 surface：
+## 6. Tangent Plane
+
+一元函数在一点附近可以用 tangent line 近似。
+
+二元函数在一点附近可以用 tangent plane 近似。
+
+如果：
 
 ```text
 z = f(x,y)
 ```
 
-在 `(a,b,f(a,b))` 处 tangent plane：
+那么在 `(a,b,f(a,b))` 处的 tangent plane 是：
 
 ```text
 z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)
 ```
 
-这公式非常重要，因为它告诉你：
+这公式的含义是：
 
 ```text
-曲面在一点附近，最自然的线性近似就是 tangent plane。
+从点 (a,b) 出发，
+x 方向变化贡献 f_x(a,b)(x-a)，
+y 方向变化贡献 f_y(a,b)(y-b)。
 ```
 
-### 2.4 Total differential approximation
+它是多变量函数最基本的线性近似。
 
-如果 `x,y` 有小变化：
+## 7. Total Differential
 
-```text
-dx, dy
-```
+Total differential 是 tangent plane 的另一个表达方式。
 
-那么函数值的小变化可以近似为：
+如果 `x` 改变一点 `dx`，`y` 改变一点 `dy`，那么：
 
 ```text
 df = f_x dx + f_y dy
@@ -234,392 +235,346 @@ df = f_x dx + f_y dy
 Δf ≈ f_x Δx + f_y Δy
 ```
 
-这本质上和 tangent plane 是同一件事：
+这表达的是：
 
 ```text
-局部线性化。
+总变化 ≈ 每个方向变化贡献的和。
 ```
 
-### 2.5 Chain rule
+这就是多变量微积分里非常重要的线性化思想。
+
+## 8. Chain Rule
+
+多变量 chain rule 处理变量之间的依赖关系。
 
 如果：
 
 ```text
-z = f(x,y), x=x(t), y=y(t)
+z = f(x,y)
+x = x(t)
+y = y(t)
 ```
 
-则：
+那么：
 
 ```text
 dz/dt = f_x dx/dt + f_y dy/dt
 ```
 
-如果 `x,y` 又依赖于两个变量，例如：
+意思是：
 
 ```text
-x=x(s,t), y=y(s,t)
+t 影响 x，x 影响 z；
+t 影响 y，y 影响 z；
+总变化是所有路径贡献之和。
 ```
 
-则：
+如果：
 
 ```text
-∂z/∂s = f_x ∂x/∂s + f_y ∂y/∂s
-∂z/∂t = f_x ∂x/∂t + f_y ∂y/∂t
+x = x(s,t)
+y = y(s,t)
 ```
 
-最好永远画 dependency tree：
+那么：
 
 ```text
-z
-↙ ↘
-x   y
-↙↘ ↙↘
-s t s t
+∂z/∂s = f_x x_s + f_y y_s
+∂z/∂t = f_x x_t + f_y y_t
 ```
 
-所有路径乘起来再相加。
-
-### 2.6 More than two variables
-
-这一节本质上是告诉你：
+Chain rule 的本质是：
 
 ```text
-前面的想法不是只对 2 variables 有效。
+沿依赖路径相乘，所有路径相加。
 ```
 
-对 `f(x,y,z)` 一样可以：
+## 9. Functions of More Than Two Variables
+
+对三变量函数：
 
 ```text
-求偏导
-做局部线性近似
-写 chain rule
+f(x,y,z)
 ```
 
-所以 Chapter 1 最重要的收获是：
+一样可以定义：
 
 ```text
-多变量 calculus 的核心语言 = level curves + partial derivatives + tangent plane + linear approximation + chain rule
+f_x
+f_y
+f_z
 ```
 
-## 3. Chapter 1 做题模板
-
-Sketch surface：
+Total differential 变成：
 
 ```text
-1. Find level curves.
-2. Examine coordinate slices.
-3. Use both to infer shape.
+df = f_x dx + f_y dy + f_z dz
 ```
 
-Partial derivatives：
+所以 Chapter 1 的思想不是二变量专用的。
+
+它真正讲的是：
 
 ```text
-对 x 求偏导时，其他变量都当 constant。
+多输入函数的局部变化。
 ```
 
-Tangent plane：
+## 10. Chapter 2: Integration Techniques
+
+这一章研究的是：
 
 ```text
-先算 f(a,b), f_x(a,b), f_y(a,b)
-再套公式
+复杂积分怎么化成会算的积分。
 ```
 
-Approximation：
+Integration techniques 的本质不是背很多招，而是识别 integrand 的结构。
+
+不同结构对应不同方法：
 
 ```text
-Δf ≈ f_xΔx + f_yΔy
+trig powers
+reduction formulae
+trig substitution
+hyperbolic substitution
+rational functions
+partial fractions
+ordinary substitution
 ```
 
-Chain rule：
+## 11. Trigonometric Integrals
+
+这一节处理：
 
 ```text
-画依赖图
-沿每条路径相乘
-最后相加
+sin^m x cos^n x
+tan^m x sec^n x
 ```
 
-## 4. Chapter 2 总览：Integration Techniques
+核心是用三角恒等式把积分变成 substitution 可处理的形式。
 
-Chapter 2 的目录是：
-
-```text
-2.1 Trigonometric integrals
-2.2 Reduction formulae
-2.3 Trigonometric and hyperbolic substitutions
-2.4 Integrating rational functions
-2.5 Other substitutions
-```
-
-这一章的核心不是“有多少技巧”，而是：
+常用恒等式：
 
 ```text
-看到 integrand 的结构，快速判断该用哪类方法。
-```
-
-也就是说：
-
-```text
-integration techniques 不是靠蛮力，而是靠 pattern recognition。
-```
-
-### 4.1 Trigonometric integrals
-
-最常见三类：
-
-```text
-powers of sin/cos
-multiple angles
-powers of tan/sec
-```
-
-最重要的判断法：
-
-#### 情况 A：`sin^m x cos^n x`
-
-如果某个指数是奇数，通常先留一个出来，再把剩下部分改写成另一个函数。
-
-例如：
-
-```text
-sin^3 x = sin x (1 - cos^2 x)
-cos^3 x = cos x (1 - sin^2 x)
-```
-
-然后 substitution。
-
-如果两个指数都偶数，通常用 half-angle identities：
-
-```text
+sin^2 x + cos^2 x = 1
+1 + tan^2 x = sec^2 x
 sin^2 x = (1 - cos 2x)/2
 cos^2 x = (1 + cos 2x)/2
 ```
 
-#### 情况 B：`tan^m x sec^n x`
+为什么要看奇偶？
 
-如果 `sec` 指数是偶数，通常留出：
+因为如果 `sin` 或 `cos` 有奇数次幂，你可以留一个出来当 derivative 的搭档。
 
-```text
-sec^2 x
-```
+如果都是偶数次幂，就用 half-angle identity 降幂。
 
-并把其他 `sec^2 x` 改成：
+## 12. Reduction Formulae
 
-```text
-1 + tan^2 x
-```
-
-如果 `tan` 指数是奇数，通常留出：
+Reduction formula 的意义是：
 
 ```text
-sec x tan x
+把高阶积分递归地化成低阶积分。
 ```
 
-并把其他 `tan^2 x` 改成：
+比如：
 
 ```text
-sec^2 x - 1
+I_n = ∫ sin^n x dx
 ```
 
-### 4.2 Reduction formulae
+你不想每个 `n` 都重新算。
 
-Reduction formula 的想法是：
+于是建立：
 
 ```text
-把高次积分变成低次积分，
-建立一个递推关系。
+I_n 和 I_{n-2} 的关系
 ```
 
-它本质上是 integration by parts 的系统化版本。
+这样可以一层层降下去。
 
-你需要理解的不是单个公式，而是这种思路：
+Reduction formula 背后的主要工具通常是 integration by parts。
+
+它体现的是：
 
 ```text
-I_n expressed in terms of I_{n-1} or I_{n-2}
+递归思想。
 ```
 
-然后递归往下压。
+## 13. Trigonometric Substitution
 
-### 4.3 Trigonometric and hyperbolic substitutions
-
-看到根号形式时，先想标准 substitution：
+Trig substitution 用来处理根号：
 
 ```text
-sqrt(a^2 - x^2)   -> x = a sin θ
-sqrt(a^2 + x^2)   -> x = a tan θ
-sqrt(x^2 - a^2)   -> x = a sec θ
+sqrt(a^2 - x^2)
+sqrt(a^2 + x^2)
+sqrt(x^2 - a^2)
 ```
 
-直觉是：
+标准替换：
 
 ```text
-用 trig identity 把根号吃掉。
+x = a sin θ       for sqrt(a^2 - x^2)
+x = a tan θ       for sqrt(a^2 + x^2)
+x = a sec θ       for sqrt(x^2 - a^2)
 ```
 
-对应 identities：
+为什么这样替？
+
+因为三角恒等式会把根号里的结构变简单。
+
+例如：
 
 ```text
 1 - sin^2 θ = cos^2 θ
-1 + tan^2 θ = sec^2 θ
-sec^2 θ - 1 = tan^2 θ
 ```
 
-有时也会用 hyperbolic substitution，本质也是为了简化根号结构。
+所以：
 
-### 4.4 Rational functions
+```text
+sqrt(a^2 - a^2 sin^2 θ)
+= a cos θ
+```
 
-这是 Chapter 2 最像“系统流程”的部分。
+根号就消失了。
 
-对 rational function：
+## 14. Rational Functions and Partial Fractions
+
+Rational function 是：
 
 ```text
 P(x)/Q(x)
 ```
 
-先判断：
+如果分子次数大于等于分母次数，先做 polynomial division。
+
+之后对 proper rational function 做 partial fractions。
+
+Partial fractions 的意义是：
 
 ```text
-proper? 还是 improper?
+把复杂分式拆成一堆简单分式。
 ```
-
-如果 improper：
-
-```text
-先 polynomial division
-```
-
-然后对 proper rational function 做 partial fractions。
-
-整体策略：
-
-```text
-1. If degree(P) >= degree(Q), divide first.
-2. Factor Q(x) as much as possible.
-3. Decompose into partial fractions.
-4. Integrate each piece.
-```
-
-Partial fractions 的基本块：
-
-```text
-linear factor: A/(x-a)
-repeated linear: A1/(x-a) + A2/(x-a)^2 + ...
-irreducible quadratic: (Ax+B)/(x^2+bx+c)
-repeated quadratic: similar layered structure
-```
-
-### 4.5 Other substitutions
-
-这节提醒你：
-
-```text
-substitution 不只是 trig substitution。
-```
-
-有些 integrand 看起来乱，但如果能识别“里面那坨函数的导数也差不多在外面”，那就应该直接做 `u`-sub。
 
 例如：
 
 ```text
-f(g(x)) g'(x)
+1 / ((x-1)(x+2))
 ```
 
-这是 substitution 最标准的信号。
-
-## 5. Chapter 2 做题总思路
-
-看到积分先问：
+可以拆成：
 
 ```text
-这是哪一类？
+A/(x-1) + B/(x+2)
 ```
 
-快速决策树：
+每一项都容易积分。
+
+如果 denominator 有 irreducible quadratic，例如：
 
 ```text
-有 sin/cos/tan/sec 的幂 -> trig integral
-有 sqrt(a^2 ± x^2) 或 sqrt(x^2-a^2) -> trig substitution
-是 rational function -> divide + partial fractions
-长得像 f(g(x))g'(x) -> ordinary substitution
-可以反复降阶 -> reduction formula
+x^2 + 1
 ```
 
-Chapter 2 最重要的不是背完所有公式，而是会分类。
-
-## 6. Chapter 3 总览：Ordinary Differential Equations
-
-Chapter 3 的目录是：
+分子要设成：
 
 ```text
-3.1 An introduction
-3.2 Initial value problems
-3.3 Separable ODEs
-3.4 First order linear ODEs
-3.5 Exact ODEs
-3.6 Solving ODEs by using a change of variable [X]
-3.7 Modelling with first order ODEs
-3.8 Second order linear ODEs with constant coefficients
+Ax + B
 ```
 
-这一章的核心是：
+而不是只设常数。
+
+## 15. Other Substitutions
+
+普通 substitution 的核心结构是：
 
 ```text
-把“变化规律”写成方程，然后解这个方程。
+f(g(x))g'(x)
 ```
 
-你不再只是求导，而是反过来：
+如果你看到 integrand 里有一个“里面的函数”和它的 derivative，就应该考虑：
 
 ```text
-已知导数关系，求函数本身。
+u = g(x)
 ```
 
-### 6.1 What is an ODE?
+Substitution 的本质是：
+
+```text
+换一个变量，让表达式变简单。
+```
+
+它不是技巧，而是 chain rule 的反向使用。
+
+## 16. Chapter 3: Ordinary Differential Equations
 
 ODE 是 ordinary differential equation。
 
-例如：
-
-```text
-dy/dx = ky
-y'' + 3y' + 2y = 0
-```
-
-它描述的是：
+它描述：
 
 ```text
 未知函数和它的导数之间的关系。
 ```
 
-解 ODE 不是求一个数，而是求一个函数。
+例如：
 
-### 6.2 Initial value problems
+```text
+dy/dx = ky
+```
 
-IVP = initial value problem。
+这不是让你求一个数，而是求一个函数 `y(x)`。
 
-也就是：
+ODE 的思想是：
+
+```text
+已知变化规律，反推出函数。
+```
+
+## 17. Initial Value Problems
+
+一个 ODE 通常有一族解。
+
+例如：
+
+```text
+dy/dx = ky
+```
+
+的解是：
+
+```text
+y = Ce^{kx}
+```
+
+这里 `C` 可以不同。
+
+Initial condition 例如：
+
+```text
+y(0)=2
+```
+
+会选出唯一一个解。
+
+所以 IVP 是：
 
 ```text
 ODE + initial condition
 ```
 
-例如：
+## 18. Separable ODEs
+
+Separable ODE 的形式是：
 
 ```text
-dy/dx = ky,   y(0)=2
+dy/dx = g(x)h(y)
 ```
 
-ODE 本身给你一族函数；
-
-initial condition 用来选出唯一那一条。
-
-### 6.3 Separable ODEs
-
-Separable 的标准形：
+它的特点是：
 
 ```text
-dy/dx = g(x) h(y)
+x 和 y 可以分到等号两边。
 ```
 
-把 `y` 相关的放一边，`x` 相关的放另一边：
+变成：
 
 ```text
 dy/h(y) = g(x) dx
@@ -627,473 +582,333 @@ dy/h(y) = g(x) dx
 
 然后两边积分。
 
-这是最基础的一类 ODE。
+Separable ODE 是最直观的一类 ODE。
 
-重点是：
+它本质上是：
 
 ```text
-先分离变量，再积分，再代初值。
+把变化率关系拆开，再反积分。
 ```
 
-### 6.4 First order linear ODEs
+## 19. First Order Linear ODEs
 
-标准形：
+一阶线性 ODE 标准形式：
 
 ```text
 y' + P(x)y = Q(x)
 ```
 
-关键工具：
+关键工具是 integrating factor：
 
 ```text
-integrating factor
+μ(x) = e^{∫P(x) dx}
 ```
 
-定义：
-
-```text
-μ(x) = e^{∫P(x)dx}
-```
-
-乘上去之后左边会变成：
-
-```text
-(μy)'
-```
-
-于是：
+乘上 integrating factor 后，左边会变成一个 product derivative：
 
 ```text
 (μy)' = μQ
 ```
 
-再积分即可。
+这就是 integrating factor 的意义。
 
-这是 Chapter 3 最重要的机械流程之一。
+它不是魔法，而是把左边强行整理成 product rule 的形式。
 
-### 6.5 Exact ODEs
+## 20. Exact ODEs
 
-标准形：
+Exact ODE 形式：
 
 ```text
 M(x,y) dx + N(x,y) dy = 0
 ```
 
-如果存在某个 potential function `F(x,y)` 使得：
+它的思想是：
+
+```text
+这是不是某个函数 F(x,y) 的 total differential？
+```
+
+如果：
 
 ```text
 F_x = M
 F_y = N
 ```
 
-则 ODE 是 exact。
+那么：
 
-判定条件通常是：
+```text
+dF = M dx + N dy
+```
+
+所以方程等价于：
+
+```text
+dF = 0
+```
+
+也就是：
+
+```text
+F(x,y) = C
+```
+
+Exact condition 通常是：
 
 ```text
 M_y = N_x
 ```
 
-解法：
+## 21. Modelling with ODEs
+
+ODE 建模的核心是：
 
 ```text
-找 F(x,y)
-然后写 F(x,y) = C
+rate of change = 原因
 ```
 
-这和 conservative field 的思路其实非常像。
-
-### 6.6 Change of variable [X]
-
-这一节是 MATH1241 的额外内容。
-
-核心思想：
+Mixing problem 常见结构：
 
 ```text
-如果原方程不直接 separable / linear / exact，
-也许通过换变量能把它变成熟悉类型。
+amount' = rate in - rate out
 ```
 
-### 6.7 Modelling with first order ODEs
-
-这一节告诉你 ODE 不只是技巧题，它是建模语言。
-
-典型模型：
+Population model 常见结构：
 
 ```text
-mixing problems
-population models
+population growth rate depends on population
 ```
 
-Mixing problems 的主线：
+比如 exponential growth：
 
 ```text
-rate of change = rate in - rate out
+dP/dt = kP
 ```
 
-Population models 的主线：
+表示增长率和当前人口成正比。
 
-```text
-growth proportional to current population
-```
+ODE 建模最重要的是先定义变量和单位。
 
-或者 logistic-style thinking。
+公式不是第一步。
 
-### 6.8 Second order linear ODEs with constant coefficients
+## 22. Second Order Linear ODEs
 
-标准形：
-
-```text
-ay'' + by' + cy = g(x)
-```
-
-先看 homogeneous case：
+常系数二阶线性 ODE：
 
 ```text
 ay'' + by' + cy = 0
 ```
 
-用 trial solution：
+用试探：
 
 ```text
 y = e^{rx}
 ```
 
-得到 characteristic equation：
+代入后得到 characteristic equation：
 
 ```text
 ar^2 + br + c = 0
 ```
 
-分三种根：
+根的类型决定解的形状。
+
+不同实根：
 
 ```text
-distinct real roots
-repeated real root
-complex conjugate roots
+y = C1e^{r1x} + C2e^{r2x}
 ```
 
-对应解型：
+重根：
 
 ```text
-y = C1 e^{r1x} + C2 e^{r2x}
-y = (C1 + C2 x)e^{rx}
+y = (C1 + C2x)e^{rx}
+```
+
+复根 `α ± βi`：
+
+```text
 y = e^{αx}(C1 cos βx + C2 sin βx)
 ```
 
-non-homogeneous case：
+这和线性代数里的 eigenvalue 思想有联系。
+
+## 23. Chapter 4: Taylor Series, Sequences, Infinite Series
+
+Chapter 4 的主题是：
 
 ```text
-general solution = complementary function + particular solution
+无限过程和函数近似。
 ```
 
-应用里常见 vibration / resonance。
-
-## 7. Chapter 3 做题模板
-
-先分类 ODE：
+它包括：
 
 ```text
-separable?
-linear first-order?
-exact?
-constant-coefficient second-order?
+Taylor polynomials
+Taylor theorem
+sequences
+infinite series
+convergence tests
+Taylor series
+power series
 ```
 
-对应方法：
+这一章很容易碎，但主线其实很清楚：
 
 ```text
-separable -> separate and integrate
-linear -> integrating factor
-exact -> find potential F
-second-order constant coeff -> characteristic equation
+用有限多项式近似函数；
+再研究无限项时是否收敛。
 ```
 
-建模题先写：
+## 24. Taylor Polynomial
 
-```text
-rate of change = ...
-```
+Taylor polynomial 是用多项式近似函数。
 
-别急着上公式。
-
-## 8. Chapter 4 总览：Taylor Series, Sequences, Infinite Series
-
-Chapter 4 的目录是：
-
-```text
-4.1 Taylor polynomials
-4.2 Taylor’s theorem
-4.3 Sequences
-4.4 Infinite series
-4.5 Tests for series convergence
-4.6 Taylor series
-4.7 Power series
-4.8 Manipulation of power series
-```
-
-这是全书最“无限过程”也最容易混淆的一章。
-
-它在做几件事：
-
-```text
-用多项式近似函数
-研究无限数列/级数有没有极限
-研究 power series 在哪里收敛
-用 Taylor series 表示函数
-```
-
-### 8.1 Taylor polynomials
-
-Taylor polynomial 的想法：
-
-```text
-在某个点附近，用 polynomial 近似函数。
-```
-
-在 `x=a` 附近的 n 次 Taylor polynomial：
+在 `x=a` 附近：
 
 ```text
 P_n(x) = f(a)
-      + f'(a)(x-a)
-      + f''(a)/2! (x-a)^2
-      + ...
-      + f^(n)(a)/n! (x-a)^n
+       + f'(a)(x-a)
+       + f''(a)/2! (x-a)^2
+       + ...
+       + f^(n)(a)/n! (x-a)^n
 ```
 
-如果 `a=0`，就是 Maclaurin polynomial。
+如果 `a=0`，叫 Maclaurin polynomial。
 
-直觉：
+意义：
 
 ```text
-polynomial 比较好算，所以我们用它来近似复杂函数。
+复杂函数在某点附近，可以用 polynomial 近似。
 ```
 
-### 8.2 Taylor’s theorem
+Polynomial 容易计算，所以 Taylor polynomial 是近似工具。
 
-Taylor theorem 告诉你：
+## 25. Taylor Theorem
+
+Taylor theorem 不只是给公式。
+
+它还告诉你：
 
 ```text
-不仅能写近似式，
-还能控制误差 remainder。
+近似误差是什么。
 ```
-
-重要的不只是公式，而是概念：
-
-```text
-Taylor polynomial 是局部近似，
-并且 theorem 告诉你这近似到底有多靠谱。
-```
-
-### 8.3 Stationary points
-
-这一节把 Taylor thinking 用到 extremum classification。
-
-在一元函数里：
-
-```text
-f'(a)=0
-```
-
-说明可能是 stationary point。
-
-再看更高阶导数或二阶导数来分类。
 
 也就是说：
 
 ```text
-Taylor expansion 可以解释为什么 second derivative test 有效。
+函数 = Taylor polynomial + remainder
 ```
 
-### 8.4 Sequences
+这让 Taylor approximation 从“猜测”变成有理论保证的近似。
 
-Sequence 就是一串数：
+Taylor theorem 也解释了为什么二阶导数可以判断 stationary point。
+
+因为在 critical point 附近，低阶非零项决定函数形状。
+
+## 26. Sequences
+
+Sequence 是：
 
 ```text
 a_1, a_2, a_3, ...
 ```
 
-研究重点：
+它研究的是：
 
 ```text
-n -> infinity 时，它趋向哪里？
+n -> infinity 时 a_n 怎么变化。
 ```
 
-你需要掌握：
+如果 `a_n` 趋向某个有限值 `L`，就说 sequence converges to `L`。
+
+如果没有有限极限，就 diverges。
+
+Sequence 是 series 的基础。
+
+因为 series 的收敛其实是在研究 partial sums 这个 sequence。
+
+## 27. Infinite Series
+
+Infinite series 是：
 
 ```text
-convergent / divergent
-monotone
-bounded
-limit laws
+Σ a_n
 ```
 
-常见技巧：
-
-```text
-algebraic simplification
-squeeze-type thinking
-dominant term comparison
-recurrence intuition
-```
-
-### 8.5 Infinite series
-
-Series 是：
-
-```text
-sum a_n
-```
-
-本质上研究 partial sums：
+它不是直接看 `a_n`，而是看 partial sums：
 
 ```text
 S_N = a_1 + ... + a_N
 ```
 
-如果 `S_N` 有极限，series converges。
-
-你一定要把 sequence 和 series 分清：
-
-```text
-sequence 看 a_n
-series 看 S_N
-```
-
-### 8.6 Convergence tests
-
-这一节是考试高频。
-
-主要 tests：
-
-```text
-kth term divergence test
-integral test
-comparison test
-limit comparison test [X]
-ratio test
-Leibniz test for alternating series
-absolute vs conditional convergence
-```
-
-每个 test 都有适用场景。
-
-#### kth term divergence test
-
 如果：
 
 ```text
-a_n does not tend to 0
+S_N -> S
 ```
 
-则：
+那么 series converges。
+
+非常重要：
 
 ```text
-sum a_n diverges
+a_n -> 0 是 series 收敛的必要条件，不是充分条件。
 ```
 
-但反过来不成立：
+例如 harmonic series：
 
 ```text
-a_n -> 0
+Σ 1/n
 ```
 
-不代表 series 一定 converges。
+虽然 `1/n -> 0`，但 series diverges。
 
-#### Integral test
+## 28. Convergence Tests
 
-适用于：
+Series convergence tests 是 Chapter 4 的核心。
+
+常见 tests：
 
 ```text
-positive, decreasing, continuous terms
+nth term divergence test
+integral test
+comparison test
+limit comparison test
+ratio test
+alternating series test
+absolute convergence
 ```
 
-把 series 和 improper integral 对应起来比较。
+每个 test 都有自己的适用对象。
 
-#### Comparison test
-
-适合正项级数。
-
-想法：
-
-```text
-拿大的已知发散级数压它，
-或拿小的已知收敛级数夹它。
-```
-
-#### Ratio test
-
-特别适合：
+Ratio test 特别适合：
 
 ```text
 factorials
 exponentials
-powers with n in exponent
+n 次幂结构
 ```
 
-看：
+Alternating series test 适合：
 
 ```text
-L = lim |a_{n+1}/a_n|
+正负交替的 series
 ```
 
-如果：
+但要检查项的大小递减并趋向 0。
+
+Absolute convergence 比 ordinary convergence 更强。
+
+## 29. Taylor Series
+
+Taylor series 是 Taylor polynomial 的无限版本：
 
 ```text
-L < 1 -> converges absolutely
-L > 1 -> diverges
-L = 1 -> inconclusive
+Σ f^(n)(a)/n! (x-a)^n
 ```
 
-#### Leibniz test
-
-对 alternating series：
-
-```text
-sum (-1)^n b_n
-```
-
-如果：
-
-```text
-b_n decreases to 0
-```
-
-则 series converges。
-
-#### Absolute vs conditional convergence
-
-如果：
-
-```text
-sum |a_n|
-```
-
-收敛，则 `sum a_n` absolutely convergent。
-
-如果：
-
-```text
-sum a_n` 收敛但 `sum |a_n|` 发散
-```
-
-则 conditionally convergent。
-
-这是概念上很重要的层级：
-
-```text
-absolute convergence 比普通 convergence 更强。
-```
-
-### 8.7 Taylor series
-
-Taylor series 是把 Taylor polynomial 推到无限：
-
-```text
-sum_{n=0}^\infty f^(n)(a)/n! (x-a)^n
-```
-
-最关键的是认熟经典展开：
+常见 Maclaurin series：
 
 ```text
 e^x
@@ -1103,479 +918,237 @@ cos x
 ln(1+x)
 ```
 
-然后会做：
+这些基本展开很重要，因为很多复杂 series 可以从它们通过 substitution、differentiation、integration 得到。
+
+Taylor series 的重点不是只写出展开，而是知道：
 
 ```text
-substitute
-differentiate
-integrate
-shift center
+在哪些 x 上收敛？
+收敛到原函数吗？
 ```
 
-### 8.8 Power series
+## 30. Power Series
 
-标准形：
+Power series 形式：
 
 ```text
-sum c_n (x-a)^n
+Σ c_n (x-a)^n
 ```
 
-研究重点：
+它像一个无限多项式。
+
+核心问题是：
 
 ```text
-它对哪些 x 收敛？
+它在哪些 x 上收敛？
 ```
 
-这就引出：
-
-```text
-radius of convergence R
-interval of convergence
-```
-
-通常用 ratio test 找：
+通常会有 radius of convergence：
 
 ```text
 |x-a| < R
 ```
 
-注意：
+但 endpoints 要单独检查。
+
+这是 power series 里最容易漏的点。
+
+## 31. Chapter 5: Applications
+
+Chapter 5 讲：
 
 ```text
-端点要单独检查。
+average value
+arc length
+speed
+surface area
 ```
 
-这点非常常考。
-
-### 8.9 Manipulation of power series
-
-Power series 很强，是因为你能对它做合法操作：
+这章的共同点是：
 
 ```text
-differentiate term-by-term
-integrate term-by-term
-multiply by x
-substitute simple expressions
+用积分累积小量。
 ```
 
-于是你可以从一个已知展开推很多新展开。
+Average value 是累积后除以长度。
 
-## 9. Chapter 4 做题模板
+Arc length 是累积小线段。
 
-Taylor polynomial：
+Speed 是位置变化率的大小。
 
-```text
-写到指定次数
-带入导数在 a 的值
-```
+Surface area 是累积旋转后的小表面积。
 
-Series convergence：
+## 32. Average Value
 
-```text
-1. 先看 a_n -> 0 吗
-2. 再判断正项/交错/含 factorial/exponential
-3. 选测试方法
-```
-
-Power series：
-
-```text
-先找 radius
-再单独测 endpoints
-```
-
-操作展开式：
-
-```text
-从基本 series 出发
-再 substitution / differentiation / integration
-```
-
-## 10. Chapter 5 总览：Averages, Arc Length, Speed and Surface Area
-
-Chapter 5 的目录是：
-
-```text
-5.1 The average value of a function
-5.2 The arc length of a curve
-5.3 The speed of a moving particle
-5.4 Surface area
-```
-
-这一章像一个“应用章”，把前面学过的积分和参数化工具用在几何和物理问题上。
-
-### 10.1 Average value of a function
-
-在区间 `[a,b]` 上，函数平均值：
+函数在 `[a,b]` 上的 average value：
 
 ```text
 f_avg = 1/(b-a) ∫_a^b f(x) dx
 ```
 
-人话：
+意义：
 
 ```text
-把函数的总量除以区间长度。
+总累积量 / 区间长度
 ```
 
-这和“平均速度 = 总路程 / 总时间”的结构是一样的。
+这和普通平均数思想一致，只是连续版本。
 
-### 10.2 Arc length
+## 33. Arc Length
 
-Arc length 是 Chapter 5 的核心。
-
-对 parameterised curve：
+如果曲线是：
 
 ```text
-r(t) = (x(t), y(t)),  a <= t <= b
+y = f(x)
 ```
 
-弧长公式：
-
-```text
-L = ∫_a^b sqrt((dx/dt)^2 + (dy/dt)^2) dt
-```
-
-如果是空间曲线：
-
-```text
-r(t) = (x(t), y(t), z(t))
-```
-
-则：
-
-```text
-L = ∫_a^b sqrt((x')^2 + (y')^2 + (z')^2) dt
-```
-
-如果曲线是 graph：
-
-```text
-y = f(x), a <= x <= b
-```
-
-则：
+那么弧长：
 
 ```text
 L = ∫_a^b sqrt(1 + (f'(x))^2) dx
 ```
 
-如果是 polar curve：
+如果曲线参数化：
 
 ```text
-r = r(θ)
+r(t) = (x(t), y(t))
 ```
 
-则：
+弧长：
 
 ```text
-L = ∫ sqrt(r^2 + (dr/dθ)^2) dθ
+L = ∫ sqrt((x'(t))^2 + (y'(t))^2) dt
 ```
 
-这几个公式最好统一理解为：
+本质都是：
 
 ```text
-小段长度 ≈ sqrt(sum of squared coordinate changes)
+小线段长度 = sqrt(dx^2 + dy^2)
 ```
 
-### 10.3 Speed of a moving particle
+再把所有小线段累积起来。
 
-如果位置向量：
+## 34. Speed
+
+如果 position vector 是：
 
 ```text
 r(t)
 ```
 
-那么 velocity：
+velocity 是：
 
 ```text
-v(t) = r'(t)
+r'(t)
 ```
 
-speed 是其大小：
+speed 是 velocity 的 magnitude：
 
 ```text
-|v(t)| = |r'(t)|
+|r'(t)|
 ```
 
-也就是说：
+注意：
 
 ```text
-speed 是弧长对时间的变化率。
+velocity 是 vector。
+speed 是 number。
 ```
 
-所以：
+总路程是：
 
 ```text
-distance travelled = ∫ speed dt
+∫ speed dt
 ```
 
-### 10.4 Surface area
+这和 arc length 是同一个结构。
 
-这一节最经典的是 surface of revolution。
+## 35. Surface Area
 
-如果曲线 `y=f(x)` 绕 x-axis 旋转，表面积通常是：
+Surface of revolution 的表面积可以理解成：
 
 ```text
-S = 2π ∫_a^b y sqrt(1 + (y')^2) dx
+小圆台面积 ≈ circumference × arc length element
 ```
 
-如果绕 y-axis 旋转，结构类似，只是半径换掉。
-
-本质上：
+所以公式结构是：
 
 ```text
-小块表面积 ≈ circumference × tiny arc length
+S = 2π ∫ radius ds
 ```
 
-所以这节是把：
+如果绕 x-axis 旋转，radius 通常是 `y`。
+
+如果绕 y-axis 旋转，radius 通常是 `x`。
+
+这里最重要的是理解：
 
 ```text
-arc length + rotation geometry
+2π radius
 ```
 
-拼起来。
-
-## 11. Chapter 5 做题模板
-
-Average value：
+来自圆周长；
 
 ```text
-总量 / 区间长度
+ds
 ```
 
-Arc length：
+来自曲线的小弧长。
+
+## 36. Calculus 全书知识关系图
 
 ```text
-先判断是 graph / parametric / polar 哪一类
-再套对应公式
+多变量函数
+  -> partial derivatives
+  -> tangent plane
+  -> differential approximation
+  -> chain rule
+
+积分技巧
+  -> substitution
+  -> trig identities
+  -> partial fractions
+  -> reduction formulae
+
+ODE
+  -> separable
+  -> first-order linear
+  -> exact
+  -> second-order linear
+  -> modelling
+
+Taylor and series
+  -> Taylor polynomial
+  -> Taylor theorem
+  -> sequences
+  -> series
+  -> convergence tests
+  -> power series
+
+applications
+  -> average value
+  -> arc length
+  -> speed
+  -> surface area
 ```
 
-Speed：
+## 37. Calculus 最重要的概念总结
+
+如果只抓核心：
 
 ```text
-先求 r'(t)
-再取 magnitude
+partial derivative 是一个变量方向上的变化率。
+tangent plane 是多变量函数的线性近似。
+total differential 是小变化的总近似。
+chain rule 是依赖路径上的变化相乘相加。
+integration techniques 是把复杂累积转化成可算形式。
+ODE 是由变化规律反推函数。
+Taylor polynomial 是局部多项式近似。
+series 收敛看的是 partial sums。
+power series 是无限多项式，必须关心收敛区间。
+average value 是连续平均。
+arc length 是小线段长度的累积。
+speed 是 velocity 的大小。
+surface area of revolution 是圆周长乘弧长元素的累积。
 ```
 
-Surface area：
-
-```text
-先认清绕哪条轴转
-找半径
-乘上 arc length element
-```
-
-## 12. 全书五章之间怎么连起来
-
-如果你只把这本书看成“五章分散内容”，会觉得很碎。
-
-其实它的逻辑是统一的：
-
-```text
-Chapter 1:
-研究多个变量下的局部变化。
-
-Chapter 2:
-研究复杂表达式的累积怎么计算。
-
-Chapter 3:
-把变化规律本身写成方程。
-
-Chapter 4:
-研究无限近似、无限求和、函数展开。
-
-Chapter 5:
-把前面的工具拿去做几何和物理应用。
-```
-
-可以把它们压成四个关键词：
-
-```text
-change
-accumulation
-approximation
-modelling
-```
-
-这四个词基本就是整个 calculus strand 的骨架。
-
-## 13. 全书最常见的混淆点
-
-```text
-1. Chapter 1 的 tangent plane 和 total differential 本质是同一个局部线性化思想。
-2. Chapter 2 的 integration techniques 重点是识别结构，不是硬背所有招数。
-3. Chapter 3 的 ODE 是“求函数”，不是“求一个数”。
-4. separable / linear / exact ODE 是三种不同分类，不要混着套。
-5. Chapter 4 里 sequence 看 a_n，series 看 partial sums S_n。
-6. a_n -> 0 只是 series 收敛的必要条件，不是充分条件。
-7. power series 求完 radius 之后，端点必须单独检查。
-8. Chapter 5 的 speed 是 velocity 的 magnitude，不是 vector。
-9. arc length 公式看起来多，其实全都来自同一个 distance idea。
-10. surface area 题最容易漏“半径”或者漏根号里的导数平方。
-```
-
-## 14. 全书复习顺序建议
-
-如果你准备考试，建议按这个顺序复习：
-
-### 第一轮：主干概念
-
-```text
-Chapter 1:
-partial derivatives, tangent plane, chain rule
-
-Chapter 2:
-trig integrals, substitution, partial fractions
-
-Chapter 3:
-separable, first-order linear, second-order constant coefficient
-
-Chapter 4:
-Taylor polynomial, convergence tests, power series
-
-Chapter 5:
-average value, arc length, speed, surface area
-```
-
-### 第二轮：题型分类
-
-```text
-看到题先判断属于哪一类。
-```
-
-不要一上来算。
-
-### 第三轮：公式默写
-
-尤其是这些：
-
-```text
-tangent plane
-total differential
-chain rule
-integrating factor
-characteristic equation
-Taylor polynomial
-ratio test
-arc length
-surface area of revolution
-```
-
-### 第四轮：易错点回看
-
-特别看：
-
-```text
-series convergence
-partial fractions setup
-ODE 分类
-arc length/surface area 公式选择
-```
-
-## 15. 全书做题 checklist
-
-### Chapter 1
-
-```text
-会看 level curves
-会算 partial derivatives
-会写 tangent plane
-会用 differential approximation
-会画 chain-rule dependency tree
-```
-
-### Chapter 2
-
-```text
-看到 trig powers 知道怎么拆
-看到 sqrt(a^2 ± x^2) 知道 substitution
-看到 rational function 知道先 divide 再 partial fractions
-```
-
-### Chapter 3
-
-```text
-能分类 ODE
-会解 separable
-会用 integrating factor
-会判断 exact
-会做 characteristic equation
-```
-
-### Chapter 4
-
-```text
-会写 Taylor polynomial
-会判断 sequence/series convergence
-会选 test
-会找 radius of convergence
-会单独检查 endpoints
-会从基本 power series 推新展开
-```
-
-### Chapter 5
-
-```text
-会算 average value
-会认 arc length 公式
-会从 position 求 speed
-会做 surface area of revolution
-```
-
-## 16. 全书考前一页纸
-
-最该背熟的公式和关键词：
-
-```text
-Chapter 1
-partial derivatives
-tangent plane:
-z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)
-df = f_x dx + f_y dy
-chain rule
-
-Chapter 2
-trig identities
-standard trig substitutions
-partial fractions decomposition
-
-Chapter 3
-separable: separate and integrate
-linear first-order: μ = e^{∫P(x)dx}
-exact: M_y = N_x
-second-order homogeneous: ar^2 + br + c = 0
-
-Chapter 4
-Taylor polynomial
-Taylor series
-kth term divergence test
-integral/comparison/ratio/alternating tests
-power series radius of convergence
-
-Chapter 5
-average value: (1/(b-a))∫_a^b f(x)dx
-arc length:
-L = ∫ sqrt(1 + (y')^2) dx
-or L = ∫ |r'(t)| dt
-speed = |r'(t)|
-surface area of revolution:
-S = 2π ∫ radius × ds
-```
-
-## 17. 最后一句 tutor 风格总结
-
-这本 Calculus notes 真正想让你形成的直觉不是：
-
-```text
-“我会很多公式。”
-```
-
-而是：
-
-```text
-我看到一个问题，能先判断它属于哪种变化/累积/近似/建模结构，
-再选对公式和方法。
-```
-
-如果你能做到这件事，这本书的主线其实已经被你抓住了。
