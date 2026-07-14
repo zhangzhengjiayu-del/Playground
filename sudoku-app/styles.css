@@ -623,6 +623,7 @@ select {
   opacity: 1;
 }
 
+.confirm-modal,
 .reward {
   position: fixed;
   inset: 0;
@@ -636,11 +637,13 @@ select {
   z-index: 30;
 }
 
+.confirm-modal.show,
 .reward.show {
   opacity: 1;
   pointer-events: auto;
 }
 
+.confirm-card,
 .reward-card {
   position: relative;
   width: min(100%, 340px);
@@ -649,6 +652,50 @@ select {
   background: var(--surface);
   text-align: center;
   overflow: hidden;
+}
+
+.confirm-card {
+  border: 1px solid rgba(234, 216, 209, 0.95);
+  box-shadow: 0 24px 70px rgba(61, 43, 42, 0.2);
+}
+
+.confirm-card::before {
+  content: "✦";
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  color: rgba(138, 166, 163, 0.32);
+  font-size: 2.6rem;
+}
+
+.confirm-kicker {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.confirm-card h2 {
+  margin: 0;
+  color: var(--strong);
+  font-size: 1.55rem;
+  line-height: 1.12;
+}
+
+.confirm-card p:not(.confirm-kicker) {
+  margin: 10px auto 18px;
+  width: min(100%, 250px);
+  color: var(--muted);
+  font-size: 0.96rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.confirm-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 9px;
 }
 
 .reward-card::before {

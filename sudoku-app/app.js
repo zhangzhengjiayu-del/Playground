@@ -45,6 +45,9 @@ const completedCountEl = document.querySelector('#completedCount');
 const homeCompletedCountEl = document.querySelector('#homeCompletedCount');
 const homeTotalTimerEl = document.querySelector('#homeTotalTimer');
 const toastEl = document.querySelector('#toast');
+const confirmNewEl = document.querySelector('#confirmNew');
+const cancelNewBtn = document.querySelector('#cancelNewBtn');
+const confirmNewBtn = document.querySelector('#confirmNewBtn');
 const rewardEl = document.querySelector('#reward');
 const rewardTextEl = document.querySelector('#rewardText');
 const tipTitleEl = document.querySelector('#tipTitle');
@@ -58,6 +61,7 @@ let toastTimer;
 let totalSeconds = Number(localStorage.getItem(TOTAL_TIME_KEY) || '0');
 let completedCount = Number(localStorage.getItem(COMPLETED_COUNT_KEY) || '0');
 let lastTick = Date.now();
+let pendingNewDifficulty = null;
 
 init();
 
@@ -93,14 +97,19 @@ function bindEvents() {
     noteBtn.classList.toggle('active', noteMode);
   });
 
-  document.querySelector('#homeNewBtn').addEventListener('click', () => startNewGame(difficultySelect.value));
+  document.querySelector('#homeNewBtn').addEventListener('click', () => requestNewGame(difficultySelect.value));
   document.querySelector('#homeContinueBtn').addEventListener('click', continueGame);
-  document.querySelector('#newGameBtn').addEventListener('click', () => startNewGame(difficultySelect.value));
-  difficultySelect.addEventListener('change', () => startNewGame(difficultySelect.value));
+  document.querySelector('#newGameBtn').addEventListener('click', () => requestNewGame(difficultySelect.value));
+  difficultySelect.addEventListener('change', () => requestNewGame(difficultySelect.value));
   document.querySelector('#eraseBtn').addEventListener('click', eraseSelected);
   document.querySelector('#checkBtn').addEventListener('click', checkBoard);
   document.querySelector('#hintBtn').addEventListener('click', () => renderTip(nextTipIndex()));
   document.querySelector('#nextTipBtn').addEventListener('click', () => renderTip(nextTipIndex()));
+  cancelNewBtn.addEventListener('click', cancelNewGameRequest);
+  confirmNewBtn.addEventListener('click', confirmNewGameRequest);
+  confirmNewEl.addEventListener('click', (event) => {
+    if (event.target === confirmNewEl) cancelNewGameRequest();
+  });
   document.querySelector('#rewardBtn').addEventListener('click', () => {
     rewardEl.classList.remove('show');
     startNewGame(state.difficulty);
@@ -142,6 +151,43 @@ function continueGame() {
   }
   selectedIndex = firstEmptyIndex(state.cells) ?? selectedIndex;
   showGame();
+}
+
+function requestNewGame(difficulty) {
+  if (hasActiveProgress()) {
+    pendingNewDifficulty = difficulty;
+    difficultySelect.value = state.difficulty;
+    showNewGameConfirm();
+    return;
+  }
+  startNewGame(difficulty);
+}
+
+function hasActiveProgress() {
+  return gameActive && !state.completed && state.cells.some((cell) => !cell.given && (cell.value || cell.notes.length));
+}
+
+function showNewGameConfirm() {
+  confirmNewEl.classList.add('show');
+  confirmNewEl.setAttribute('aria-hidden', 'false');
+}
+
+function hideNewGameConfirm() {
+  confirmNewEl.classList.remove('show');
+  confirmNewEl.setAttribute('aria-hidden', 'true');
+}
+
+function cancelNewGameRequest() {
+  pendingNewDifficulty = null;
+  difficultySelect.value = state.difficulty;
+  hideNewGameConfirm();
+}
+
+function confirmNewGameRequest() {
+  const difficulty = pendingNewDifficulty || state.difficulty;
+  pendingNewDifficulty = null;
+  hideNewGameConfirm();
+  startNewGame(difficulty);
 }
 
 function startNewGame(difficulty) {

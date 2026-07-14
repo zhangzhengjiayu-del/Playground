@@ -100,6 +100,17 @@
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="confirmNew" class="confirm-modal" aria-hidden="true">
+      <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmCopy">
+        <p class="confirm-kicker">tiny pause</p>
+        <h2 id="confirmTitle">Start a new game?</h2>
+        <p id="confirmCopy">Your current board and notes will be replaced.</p>
+        <div class="confirm-actions">
+          <button id="cancelNewBtn" class="ghost-btn" type="button">Keep playing</button>
+          <button id="confirmNewBtn" class="primary-btn" type="button">New game</button>
+        </div>
+      </div>
+    </div>
     <div id="reward" class="reward" aria-hidden="true">
       <div class="reward-card">
         <div class="sparkles" aria-hidden="true"></div>
