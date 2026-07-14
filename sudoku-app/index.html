@@ -1,74 +1,111 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7f1e7" />
+    <meta name="theme-color" content="#fbf3ef" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="进阶数独" />
-    <title>进阶数独</title>
+    <meta name="apple-mobile-web-app-title" content="Cat Sudoku" />
+    <title>Cat Sudoku</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./icon.svg" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="app-shell">
+      <section id="homeScreen" class="home-screen" aria-label="Start screen">
+        <div class="insta-card" aria-hidden="true">
+          <div class="post-top">
+            <span class="story-dot"></span>
+            <span class="post-name">softsudoku</span>
+            <span class="post-menu">•••</span>
+          </div>
+          <div class="post-image">
+            <span class="cream-cloth"></span>
+            <span class="latte-cup"><i></i></span>
+            <span class="cat-cookie"><i></i><b></b></span>
+            <span class="doodle star s1">✦</span>
+            <span class="doodle star s2">✧</span>
+            <span class="doodle sparkle s3">⋆</span>
+            <span class="doodle text t1">star</span>
+            <span class="doodle text t2">meow</span>
+          </div>
+          <div class="post-actions">
+            <span>♡</span><span>⌕</span><span>↗</span><span>⌑</span>
+          </div>
+        </div>
+        <p class="eyebrow">soft logic club</p>
+        <h1>Soft Sudoku</h1>
+        <p class="home-copy">Daily puzzle mood, tiny notes, and quiet wins.</p>
+        <div class="home-stats" aria-label="Saved stats">
+          <span><strong id="homeCompletedCount">0</strong> wins</span>
+          <span id="homeTotalTimer">00:00 total</span>
+        </div>
+        <div class="home-actions">
+          <button id="homeNewBtn" class="primary-btn" type="button">New game</button>
+          <button id="homeContinueBtn" class="ghost-btn" type="button">Continue</button>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="game-screen" aria-label="Sudoku game" hidden>
       <header class="topbar">
         <div>
-          <p class="eyebrow">Sudoku</p>
-          <h1>进阶数独</h1>
+          <p class="eyebrow">Cat Sudoku</p>
+          <h1>Puzzle</h1>
         </div>
-        <div class="stats" aria-label="游戏统计">
+        <div class="stats" aria-label="Game stats">
           <span id="gameTimer">00:00</span>
-          <span id="totalTimer">总计 00:00</span>
+          <span id="totalTimer">00:00 total</span>
+          <span id="completedCount">0 wins</span>
         </div>
       </header>
 
-      <section class="controls" aria-label="难度和模式">
+      <section class="controls" aria-label="Difficulty and mode">
         <label class="select-wrap">
-          <span>难度</span>
+          <span>Level</span>
           <select id="difficultySelect">
-            <option value="gentle">入门</option>
-            <option value="steady">普通</option>
-            <option value="sharp">困难</option>
-            <option value="expert">专家</option>
-            <option value="master">大师</option>
+            <option value="gentle">Soft</option>
+            <option value="steady">Easy</option>
+            <option value="sharp">Hard</option>
+            <option value="expert">Expert</option>
+            <option value="master">Master</option>
           </select>
         </label>
-        <button id="newGameBtn" class="ghost-btn" type="button">新局</button>
-        <button id="noteBtn" class="mode-btn" type="button" aria-pressed="false">笔记</button>
+        <button id="newGameBtn" class="ghost-btn" type="button">New</button>
+        <button id="noteBtn" class="mode-btn" type="button" aria-pressed="false" aria-label="Note mode" title="Note mode">✎</button>
       </section>
 
       <section class="board-wrap">
-        <div id="board" class="board" role="grid" aria-label="9乘9数独棋盘"></div>
+        <div id="board" class="board" role="grid" aria-label="9 by 9 Sudoku board"></div>
       </section>
 
-      <section id="numberPad" class="number-pad" aria-label="数字键盘"></section>
+      <section id="numberPad" class="number-pad" aria-label="Number pad"></section>
 
-      <section class="actions" aria-label="游戏操作">
-        <button id="eraseBtn" class="ghost-btn" type="button">清除</button>
-        <button id="hintBtn" class="ghost-btn" type="button">进阶技巧</button>
-        <button id="checkBtn" class="primary-btn" type="button">检查</button>
+      <section class="actions" aria-label="Game actions">
+        <button id="eraseBtn" class="ghost-btn" type="button">Erase</button>
+        <button id="hintBtn" class="ghost-btn" type="button">Skill</button>
+        <button id="checkBtn" class="primary-btn" type="button">Check</button>
       </section>
 
       <article id="tipPanel" class="tip-panel" aria-live="polite">
         <div class="tip-head">
-          <span>进阶技巧</span>
-          <button id="nextTipBtn" class="tiny-btn" type="button">换一条</button>
+          <span>Advanced skill</span>
+          <button id="nextTipBtn" class="tiny-btn" type="button">Next</button>
         </div>
         <h2 id="tipTitle"></h2>
         <p id="tipBody"></p>
       </article>
+      </section>
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <div id="reward" class="reward" aria-hidden="true">
       <div class="reward-card">
         <div class="sparkles" aria-hidden="true"></div>
-        <h2>完成</h2>
+        <h2>Win</h2>
         <p id="rewardText"></p>
-        <button id="rewardBtn" class="primary-btn" type="button">下一局</button>
+        <button id="rewardBtn" class="primary-btn" type="button">Next game</button>
       </div>
     </div>
 

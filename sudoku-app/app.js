@@ -1,43 +1,49 @@
 const STORAGE_KEY = 'advanced-sudoku-state-v1';
 const TOTAL_TIME_KEY = 'advanced-sudoku-total-seconds-v1';
+const COMPLETED_COUNT_KEY = 'advanced-sudoku-completed-count-v1';
 
 const DIFFICULTIES = {
-  gentle: { label: '入门', givens: 46 },
-  steady: { label: '普通', givens: 40 },
-  sharp: { label: '困难', givens: 34 },
-  expert: { label: '专家', givens: 29 },
-  master: { label: '大师', givens: 24 }
+  gentle: { label: 'Soft', givens: 46 },
+  steady: { label: 'Easy', givens: 40 },
+  sharp: { label: 'Hard', givens: 34 },
+  expert: { label: 'Expert', givens: 29 },
+  master: { label: 'Master', givens: 24 }
 };
 
 const TIPS = [
   {
-    title: 'XY-Wing：用三个双值格制造删数链',
-    body: '找一个只剩 XY 的枢纽格，再找两个与它分别互相可见的翼格：一个是 XZ，另一个是 YZ。如果某个格子同时看得见两个翼格，那么它不能填 Z。原因是枢纽不管取 X 还是 Y，都会迫使其中一个翼格取 Z，所以共同可见格里的 Z 一定是假候选。'
+    title: 'XY-Wing: three cells, one clean delete',
+    body: 'Find a pivot cell with only XY. Then find two wing cells that see the pivot: one XZ and one YZ. Any cell that sees both wings cannot keep Z, because whichever value the pivot takes, one wing is forced to become Z.'
   },
   {
-    title: '唯一矩形：避免双解的高级排除',
-    body: '当两行两列的四个角几乎都只含同一对候选 AB 时，要警惕唯一矩形。如果其中三个角只有 AB，而第四角还有 AB 以外的候选，那么第四角通常不能只靠 AB 留下，否则谜题会形成两个解。优先删除第四角中的 A 或 B，保留破坏矩形的额外候选。'
+    title: 'Unique Rectangle: protect the single solution',
+    body: 'When four corners across two rows and two columns almost all contain the same pair AB, watch for a rectangle. If three corners are only AB and the fourth has extra candidates, remove the risky AB from that fourth corner when the pattern would otherwise allow two solutions.'
   },
   {
-    title: '强链弱链：把候选当成逻辑开关',
-    body: '某个数字在一个单位中只出现两次时，这两个候选形成强链：一个假则另一个真。两个相互可见的同数候选形成弱链：一个真则另一个假。把强弱链交替串起来，如果链两端是同一个数字且互相可见，就能删除它们共同可见位置中的这个候选。'
+    title: 'Strong and weak links: candidates as switches',
+    body: 'If a number appears only twice in a row, column, or box, those two candidates form a strong link. One false means the other true. Chain strong and weak links together; if both ends are the same number and see each other, shared peers can delete that number.'
   },
   {
-    title: '鱼形结构：从行列分布删候选',
-    body: 'X-Wing、Swordfish、Jellyfish 都是在若干行里观察同一个数字。如果这个数字在 N 行中只落在同样 N 列里，那么这些列的其他格不能再有这个数字。关键不是看宫，而是看候选在行列之间形成的封闭矩形或网格。'
+    title: 'Fish patterns: read rows and columns',
+    body: 'X-Wing, Swordfish, and Jellyfish all track one digit. If a digit in N rows is locked into the same N columns, every other cell in those columns loses that digit. The key is the closed row-column net, not the boxes.'
   },
   {
-    title: 'ALS：几乎锁定集合',
-    body: '一个区域里有 N 个格子，却总共只有 N+1 种候选，这叫几乎锁定集合。它离“锁定”只差一步。若两个 ALS 共享一个受限候选 R，且所有 R 互相可见，那么另一个同时出现在两个 ALS 中的候选 Z，可以从共同可见位置删除。这个技巧适合卡在专家题末段时使用。'
+    title: 'ALS: almost locked sets',
+    body: 'An ALS has N cells with N+1 total candidates. It is one step away from being locked. If two ALS groups share a restricted candidate R, another candidate Z that appears in both groups can often be removed from cells that see both groups.'
   }
 ];
 
+const homeScreenEl = document.querySelector('#homeScreen');
+const gameScreenEl = document.querySelector('#gameScreen');
 const boardEl = document.querySelector('#board');
 const padEl = document.querySelector('#numberPad');
 const noteBtn = document.querySelector('#noteBtn');
 const difficultySelect = document.querySelector('#difficultySelect');
 const gameTimerEl = document.querySelector('#gameTimer');
 const totalTimerEl = document.querySelector('#totalTimer');
+const completedCountEl = document.querySelector('#completedCount');
+const homeCompletedCountEl = document.querySelector('#homeCompletedCount');
+const homeTotalTimerEl = document.querySelector('#homeTotalTimer');
 const toastEl = document.querySelector('#toast');
 const rewardEl = document.querySelector('#reward');
 const rewardTextEl = document.querySelector('#rewardText');
@@ -47,8 +53,10 @@ const tipBodyEl = document.querySelector('#tipBody');
 let state = hydrateState(loadState()) || createGame('steady');
 let selectedIndex = firstEmptyIndex(state.cells) ?? 0;
 let noteMode = false;
+let gameActive = false;
 let toastTimer;
 let totalSeconds = Number(localStorage.getItem(TOTAL_TIME_KEY) || '0');
+let completedCount = Number(localStorage.getItem(COMPLETED_COUNT_KEY) || '0');
 let lastTick = Date.now();
 
 init();
@@ -58,7 +66,7 @@ function init() {
   renderPad();
   renderTip(state.tipIndex ?? randomInt(TIPS.length));
   bindEvents();
-  render();
+  showHome();
   setInterval(tickTimers, 1000);
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -85,6 +93,8 @@ function bindEvents() {
     noteBtn.classList.toggle('active', noteMode);
   });
 
+  document.querySelector('#homeNewBtn').addEventListener('click', () => startNewGame(difficultySelect.value));
+  document.querySelector('#homeContinueBtn').addEventListener('click', continueGame);
   document.querySelector('#newGameBtn').addEventListener('click', () => startNewGame(difficultySelect.value));
   difficultySelect.addEventListener('change', () => startNewGame(difficultySelect.value));
   document.querySelector('#eraseBtn').addEventListener('click', eraseSelected);
@@ -101,14 +111,37 @@ function tickTimers() {
   const now = Date.now();
   const delta = Math.max(1, Math.round((now - lastTick) / 1000));
   lastTick = now;
-  if (!state.completed) {
+  if (gameActive && !state.completed) {
     state.elapsed += delta;
     totalSeconds += delta;
     localStorage.setItem(TOTAL_TIME_KEY, String(totalSeconds));
     saveState();
   }
-  gameTimerEl.textContent = formatTime(state.elapsed);
-  totalTimerEl.textContent = `总计 ${formatTime(totalSeconds)}`;
+  renderStats();
+}
+
+function showHome() {
+  gameActive = false;
+  homeScreenEl.hidden = false;
+  gameScreenEl.hidden = true;
+  renderStats();
+}
+
+function showGame() {
+  gameActive = true;
+  lastTick = Date.now();
+  homeScreenEl.hidden = true;
+  gameScreenEl.hidden = false;
+  render();
+}
+
+function continueGame() {
+  if (state.completed) {
+    startNewGame(state.difficulty);
+    return;
+  }
+  selectedIndex = firstEmptyIndex(state.cells) ?? selectedIndex;
+  showGame();
 }
 
 function startNewGame(difficulty) {
@@ -120,7 +153,7 @@ function startNewGame(difficulty) {
   lastTick = Date.now();
   difficultySelect.value = difficulty;
   saveState();
-  render();
+  showGame();
 }
 
 function playNumber(number) {
@@ -130,7 +163,7 @@ function playNumber(number) {
   if (noteMode) {
     if (cell.value === number) return;
     if (!canAddNote(selectedIndex, number)) {
-      showToast('这个数字已在同宫、同行或同列中出现，不能记入候选。');
+      showToast('Already in this row, column, or box.');
       return;
     }
     toggleNote(cell, number);
@@ -140,10 +173,9 @@ function playNumber(number) {
     cleanupPeerNotes(selectedIndex, number);
     if (number !== state.solution[selectedIndex]) {
       cell.error = true;
-      showToast('这个位置不对，先保留给你检查。');
+      showToast('Not quite. Keeping it marked.');
     } else {
       cell.error = false;
-      moveSelectionForward();
     }
   }
 
@@ -167,11 +199,11 @@ function checkBoard() {
   if (wrong >= 0) {
     selectedIndex = wrong;
     state.cells[wrong].error = true;
-    showToast('有一个填入数字不对，已经帮你选中。');
+    showToast('One number is off. I selected it.');
   } else if (state.cells.every((cell) => cell.value)) {
     completeGame();
   } else {
-    showToast('目前填入的数字都正确。');
+    showToast('Everything filled so far is right.');
   }
   saveState();
   render();
@@ -180,8 +212,11 @@ function checkBoard() {
 function completeGame() {
   if (state.completed) return;
   state.completed = true;
+  completedCount += 1;
+  localStorage.setItem(COMPLETED_COUNT_KEY, String(completedCount));
   saveState();
-  rewardTextEl.textContent = `${DIFFICULTIES[state.difficulty].label}难度，用时 ${formatTime(state.elapsed)}。`;
+  renderStats();
+  rewardTextEl.textContent = `${DIFFICULTIES[state.difficulty].label} in ${formatTime(state.elapsed)}. ${completedCount} wins total.`;
   rewardEl.classList.add('show');
   launchConfetti();
 }
@@ -203,6 +238,7 @@ function render() {
     button.classList.toggle('peer', isPeer(i, selectedIndex) && i !== selectedIndex);
     button.classList.toggle('same-number', Boolean(selectedValue && cell.value === selectedValue));
     button.classList.toggle('error', cell.error);
+    button.classList.toggle('player-value', Boolean(cell.value && !cell.given));
     button.classList.add(`row-${Math.floor(i / 9)}`, `col-${i % 9}`);
 
     if (cell.value) {
@@ -220,8 +256,7 @@ function render() {
     boardEl.append(button);
   }
   renderPadState();
-  gameTimerEl.textContent = formatTime(state.elapsed);
-  totalTimerEl.textContent = `总计 ${formatTime(totalSeconds)}`;
+  renderStats();
 }
 
 function renderPad() {
@@ -242,8 +277,16 @@ function renderPadState() {
     const left = 9 - counts[number];
     button.disabled = left <= 0;
     button.classList.toggle('used-up', left <= 0);
-    button.querySelector('span').textContent = left > 0 ? `剩${left}` : '';
+    button.querySelector('span').textContent = left > 0 ? `${left} left` : '';
   });
+}
+
+function renderStats() {
+  gameTimerEl.textContent = formatTime(state.elapsed);
+  totalTimerEl.textContent = `${formatTime(totalSeconds)} total`;
+  completedCountEl.textContent = `${completedCount} wins`;
+  homeCompletedCountEl.textContent = String(completedCount);
+  homeTotalTimerEl.textContent = `${formatTime(totalSeconds)} total`;
 }
 
 function renderTip(index) {
@@ -286,11 +329,6 @@ function countValues() {
     if (cell.value) counts[cell.value] += 1;
   }
   return counts;
-}
-
-function moveSelectionForward() {
-  const next = state.cells.findIndex((cell, index) => index > selectedIndex && !cell.value);
-  selectedIndex = next >= 0 ? next : firstEmptyIndex(state.cells) ?? selectedIndex;
 }
 
 function createGame(difficulty) {
@@ -478,7 +516,7 @@ function launchConfetti() {
 function cellLabel(index, cell) {
   const row = Math.floor(index / 9) + 1;
   const col = (index % 9) + 1;
-  return `第${row}行第${col}列，${cell.value ? cell.value : '空格'}`;
+  return `Row ${row}, column ${col}, ${cell.value ? cell.value : 'empty'}`;
 }
 
 function shuffle(array) {

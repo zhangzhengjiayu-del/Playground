@@ -1,11 +1,11 @@
 {
-  "name": "进阶数独",
-  "short_name": "数独",
-  "description": "可离线安装的手机数独练习应用，支持五档难度、候选笔记、总时间统计和进阶技巧。",
+  "name": "Cat Sudoku",
+  "short_name": "Sudoku",
+  "description": "A soft mobile Sudoku PWA with five levels, notes, stats, advanced tips, and offline support.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f7f1e7",
-  "theme_color": "#f7f1e7",
+  "background_color": "#fbf3ef",
+  "theme_color": "#fbf3ef",
   "orientation": "portrait-primary",
   "icons": [
     {
