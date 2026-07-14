@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1c6b62" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Deadline Tracker" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Course Deadline Tracker</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Course planner</p>
+        <h1>Deadline Tracker</h1>
+        <p id="termStatus" class="term-status"></p>
+      </div>
+      <div class="header-actions">
+        <button id="exportButton" class="ghost-button" type="button">Export</button>
+        <label class="ghost-button file-button">
+          Import
+          <input id="importFile" type="file" accept=".json,.csv,.txt,.html,.htm" />
+        </label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel setup-panel" aria-labelledby="setup-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Control</p>
+            <h2 id="setup-title">Courses & Term</h2>
+          </div>
+          <button id="resetButton" class="danger-button" type="button">Reset</button>
+        </div>
+
+        <div id="courseList" class="course-list"></div>
+
+        <div class="break-links-section">
+          <div class="mini-section-heading">
+            <p class="eyebrow">Break links</p>
+            <button id="toggleBreakFormButton" class="ghost-button" type="button">+ Link</button>
+          </div>
+          <div id="breakLinkList" class="break-link-list"></div>
+          <div id="breakLinkForm" class="break-link-form">
+            <input id="breakLinkNameInput" type="text" placeholder="Modern Family" />
+            <input id="breakLinkUrlInput" type="url" placeholder="Website URL" />
+            <button id="addBreakLinkButton" class="ghost-button" type="button">Add</button>
+          </div>
+        </div>
+
+        <div class="term-settings">
+          <label>
+            Year
+            <select id="termYearInput">
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="2031">2031</option>
+              <option value="2032">2032</option>
+            </select>
+          </label>
+          <label>
+            Term
+            <select id="termNumberInput">
+              <option value="1">T1</option>
+              <option value="2">T2</option>
+              <option value="3">T3</option>
+            </select>
+          </label>
+          <label>
+            Week 1 Monday
+            <input id="weekOneInput" type="date" />
+          </label>
+        </div>
+
+      </aside>
+
+      <section class="panel import-panel" aria-labelledby="import-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Add</p>
+            <h2 id="import-title">New Task</h2>
+          </div>
+          <div class="mode-toggle" role="tablist" aria-label="Add mode">
+            <button id="autoModeButton" class="mode-button active" type="button">Auto</button>
+            <button id="manualModeButton" class="mode-button" type="button">Manual</button>
+          </div>
+        </div>
+        <div id="autoAddPanel" class="add-panel active">
+          <div class="auto-toolbar">
+            <label>
+              Source course
+              <select id="sourceCourseInput"></select>
+            </label>
+            <button id="extractButton" class="primary-button" type="button">Extract deadlines</button>
+          </div>
+          <textarea
+            id="sourceText"
+            placeholder="Paste the whole course page here. Example: Due Date / Week 5 Friday 12:00 pm Sydney Local Time"
+          ></textarea>
+          <div id="extractPreview" class="extract-preview"></div>
+        </div>
+
+        <div id="manualAddPanel" class="add-panel">
+          <form id="taskForm" class="task-form">
+            <div class="form-grid">
+              <label>
+                Course
+                <select id="courseInput" required></select>
+              </label>
+              <label>
+                Type
+                <select id="typeInput" required>
+                  <option>Assignment</option>
+                  <option>Weekly Task</option>
+                  <option>Project</option>
+                  <option>Final Exam</option>
+                  <option>Lab Exam</option>
+                </select>
+              </label>
+              <label class="wide">
+                Task name
+                <input id="nameInput" type="text" placeholder="e.g. Assignment 1" required />
+              </label>
+              <label>
+                Deadline
+                <input id="deadlineInput" type="datetime-local" required />
+              </label>
+              <label>
+                Status
+                <select id="statusInput">
+                  <option value="todo">Not done</option>
+                  <option value="planned">Planned</option>
+                  <option value="done">Done</option>
+                </select>
+              </label>
+            </div>
+            <button class="primary-button" type="submit">Add task</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel todo-panel" aria-labelledby="todo-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Planner</p>
+            <h2 id="todo-title">⚡️ To Do List</h2>
+          </div>
+          <select id="filterInput" aria-label="Filter tasks">
+            <option value="todo">Not done</option>
+            <option value="planned">Planned</option>
+            <option value="all">All</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="summary-row" id="summaryRow"></div>
+        <div id="todoList" class="todo-list"></div>
+      </section>
+    </main>
+
+    <template id="courseTemplate">
+      <article class="course-card">
+        <div class="course-main">
+          <input class="course-code" type="text" />
+          <button class="link-button official-link" type="button" data-open-main>Official site</button>
+        </div>
+        <button class="ghost-button" type="button" data-edit-main>Edit site</button>
+        <div class="main-site-form">
+          <input class="course-main-url" type="url" placeholder="Official course website URL" />
+        </div>
+        <div class="task-link-list"></div>
+        <button class="ghost-button add-site-toggle" type="button" data-toggle-link-form>+ Site</button>
+        <div class="task-link-form">
+          <input class="task-link-name" type="text" placeholder="Task site name" />
+          <input class="task-link-url" type="url" placeholder="Task URL" />
+          <button class="ghost-button" type="button" data-add-link>Add</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>

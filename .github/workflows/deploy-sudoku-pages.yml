@@ -1,10 +1,11 @@
-name: Deploy Sudoku PWA to GitHub Pages
+name: Deploy Playground Apps to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
       - 'sudoku-app/**'
+      - 'course-deadline-tracker/**'
       - '.github/workflows/deploy-sudoku-pages.yml'
   workflow_dispatch:
 
@@ -30,10 +31,44 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Sudoku app
+      - name: Build Pages artifact
+        run: |
+          mkdir -p _site
+          cp -R sudoku-app _site/sudoku-app
+          mkdir -p _site/deadline-tracker
+          cp course-deadline-tracker/index.html _site/deadline-tracker/
+          cp course-deadline-tracker/styles.css _site/deadline-tracker/
+          cp course-deadline-tracker/app.js _site/deadline-tracker/
+          cp course-deadline-tracker/manifest.webmanifest _site/deadline-tracker/
+          cp course-deadline-tracker/service-worker.js _site/deadline-tracker/
+          cp -R course-deadline-tracker/icons _site/deadline-tracker/icons
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>Playground Apps</title>
+              <style>
+                body { font-family: system-ui, sans-serif; margin: 40px; background: #eef2ef; color: #18201b; }
+                main { max-width: 720px; margin: 0 auto; display: grid; gap: 14px; }
+                a { display: block; padding: 16px; border-radius: 10px; background: white; color: #134e48; font-weight: 800; text-decoration: none; }
+              </style>
+            </head>
+            <body>
+              <main>
+                <h1>Playground Apps</h1>
+                <a href="./deadline-tracker/">Deadline Tracker</a>
+                <a href="./sudoku-app/">Sudoku</a>
+              </main>
+            </body>
+          </html>
+          HTML
+
+      - name: Upload apps
         uses: actions/upload-pages-artifact@v3
         with:
-          path: sudoku-app
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
