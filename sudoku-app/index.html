@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f1e7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="进阶数独" />
+    <title>进阶数独</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Sudoku</p>
+          <h1>进阶数独</h1>
+        </div>
+        <div class="stats" aria-label="游戏统计">
+          <span id="gameTimer">00:00</span>
+          <span id="totalTimer">总计 00:00</span>
+        </div>
+      </header>
+
+      <section class="controls" aria-label="难度和模式">
+        <label class="select-wrap">
+          <span>难度</span>
+          <select id="difficultySelect">
+            <option value="gentle">入门</option>
+            <option value="steady">普通</option>
+            <option value="sharp">困难</option>
+            <option value="expert">专家</option>
+            <option value="master">大师</option>
+          </select>
+        </label>
+        <button id="newGameBtn" class="ghost-btn" type="button">新局</button>
+        <button id="noteBtn" class="mode-btn" type="button" aria-pressed="false">笔记</button>
+      </section>
+
+      <section class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="9乘9数独棋盘"></div>
+      </section>
+
+      <section id="numberPad" class="number-pad" aria-label="数字键盘"></section>
+
+      <section class="actions" aria-label="游戏操作">
+        <button id="eraseBtn" class="ghost-btn" type="button">清除</button>
+        <button id="hintBtn" class="ghost-btn" type="button">进阶技巧</button>
+        <button id="checkBtn" class="primary-btn" type="button">检查</button>
+      </section>
+
+      <article id="tipPanel" class="tip-panel" aria-live="polite">
+        <div class="tip-head">
+          <span>进阶技巧</span>
+          <button id="nextTipBtn" class="tiny-btn" type="button">换一条</button>
+        </div>
+        <h2 id="tipTitle"></h2>
+        <p id="tipBody"></p>
+      </article>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="reward" class="reward" aria-hidden="true">
+      <div class="reward-card">
+        <div class="sparkles" aria-hidden="true"></div>
+        <h2>完成</h2>
+        <p id="rewardText"></p>
+        <button id="rewardBtn" class="primary-btn" type="button">下一局</button>
+      </div>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
