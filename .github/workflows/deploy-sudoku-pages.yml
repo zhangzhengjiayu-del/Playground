@@ -7,6 +7,7 @@ on:
       - 'sudoku-app/**'
       - 'vocab-chat-app/**'
       - 'playground-apps/**'
+      - 'course-deadline-tracker/**'
       - '.github/workflows/deploy-sudoku-pages.yml'
   workflow_dispatch:
 
@@ -37,17 +38,12 @@ jobs:
           mkdir -p _site
           cp -R sudoku-app _site/sudoku-app
           cp -R vocab-chat-app _site/vocab-chat-app
-          mkdir -p _site/deadline-tracker
+          cp -R course-deadline-tracker _site/deadline-tracker
           cp playground-apps/index.html _site/index.html
           cp playground-apps/styles.css _site/styles.css
           cp playground-apps/manifest.webmanifest _site/manifest.webmanifest
           cp playground-apps/icon.svg _site/icon.svg
           cp playground-apps/sw.js _site/sw.js
-          cp playground-apps/index.html _site/deadline-tracker/index.html
-          cp playground-apps/styles.css _site/deadline-tracker/styles.css
-          cp playground-apps/manifest.webmanifest _site/deadline-tracker/manifest.webmanifest
-          cp playground-apps/icon.svg _site/deadline-tracker/icon.svg
-          cp playground-apps/sw.js _site/deadline-tracker/sw.js
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <html lang="en">
