@@ -1,0 +1,19 @@
+{
+  "name": "Playground Apps",
+  "short_name": "Apps",
+  "description": "Local launcher for Playground mobile apps.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef4f0",
+  "theme_color": "#eef4f0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

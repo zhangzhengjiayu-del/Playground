@@ -1,0 +1,18 @@
+{
+  "name": "Vocab Chat",
+  "short_name": "Vocab Chat",
+  "description": "A mobile daily English vocabulary and friend-style chat practice PWA.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7efe7",
+  "theme_color": "#f7efe7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

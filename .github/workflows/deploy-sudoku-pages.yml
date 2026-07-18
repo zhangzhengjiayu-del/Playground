@@ -5,7 +5,8 @@ on:
     branches: [main]
     paths:
       - 'sudoku-app/**'
-      - 'course-deadline-tracker/**'
+      - 'vocab-chat-app/**'
+      - 'playground-apps/**'
       - '.github/workflows/deploy-sudoku-pages.yml'
   workflow_dispatch:
 
@@ -35,31 +36,72 @@ jobs:
         run: |
           mkdir -p _site
           cp -R sudoku-app _site/sudoku-app
+          cp -R vocab-chat-app _site/vocab-chat-app
           mkdir -p _site/deadline-tracker
-          cp course-deadline-tracker/index.html _site/deadline-tracker/
-          cp course-deadline-tracker/styles.css _site/deadline-tracker/
-          cp course-deadline-tracker/app.js _site/deadline-tracker/
-          cp course-deadline-tracker/manifest.webmanifest _site/deadline-tracker/
-          cp course-deadline-tracker/service-worker.js _site/deadline-tracker/
-          cp -R course-deadline-tracker/icons _site/deadline-tracker/icons
+          cp playground-apps/index.html _site/index.html
+          cp playground-apps/styles.css _site/styles.css
+          cp playground-apps/manifest.webmanifest _site/manifest.webmanifest
+          cp playground-apps/icon.svg _site/icon.svg
+          cp playground-apps/sw.js _site/sw.js
+          cp playground-apps/index.html _site/deadline-tracker/index.html
+          cp playground-apps/styles.css _site/deadline-tracker/styles.css
+          cp playground-apps/manifest.webmanifest _site/deadline-tracker/manifest.webmanifest
+          cp playground-apps/icon.svg _site/deadline-tracker/icon.svg
+          cp playground-apps/sw.js _site/deadline-tracker/sw.js
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <html lang="en">
             <head>
               <meta charset="utf-8">
               <meta name="viewport" content="width=device-width, initial-scale=1">
+              <meta name="theme-color" content="#eef4f0">
+              <meta name="apple-mobile-web-app-capable" content="yes">
+              <meta name="apple-mobile-web-app-title" content="Playground Apps">
               <title>Playground Apps</title>
+              <link rel="manifest" href="./manifest.webmanifest">
+              <link rel="apple-touch-icon" href="./icon.svg">
               <style>
-                body { font-family: system-ui, sans-serif; margin: 40px; background: #eef2ef; color: #18201b; }
-                main { max-width: 720px; margin: 0 auto; display: grid; gap: 14px; }
-                a { display: block; padding: 16px; border-radius: 10px; background: white; color: #134e48; font-weight: 800; text-decoration: none; }
+                body { font-family: system-ui, sans-serif; margin: 0; min-height: 100vh; background: #eef4f0; color: #111c17; }
+                main { max-width: 760px; margin: 0 auto; padding: 76px 28px; display: grid; gap: 18px; }
+                h1 { margin: 0 0 34px; font-size: clamp(46px, 11vw, 68px); line-height: .98; }
+                a { display: block; padding: 22px; border-radius: 20px; background: white; color: #145c52; font-size: 26px; font-weight: 850; text-decoration: none; box-shadow: 0 16px 34px rgba(17, 28, 23, .09); }
+                small { display: block; margin-top: 8px; color: #617067; font-size: 14px; font-weight: 750; }
               </style>
             </head>
             <body>
               <main>
                 <h1>Playground Apps</h1>
-                <a href="./deadline-tracker/">Deadline Tracker</a>
-                <a href="./sudoku-app/">Sudoku</a>
+                <a href="./vocab-chat-app/">Vocab Chat<small>daily vocabulary and friend-style practice</small></a>
+                <a href="./sudoku-app/">Sudoku<small>soft mobile puzzle app</small></a>
+              </main>
+            </body>
+          </html>
+          HTML
+          cat > _site/deadline-tracker/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <meta name="theme-color" content="#eef4f0">
+              <meta name="apple-mobile-web-app-capable" content="yes">
+              <meta name="apple-mobile-web-app-title" content="Playground Apps">
+              <title>Playground Apps</title>
+              <link rel="manifest" href="./manifest.webmanifest">
+              <link rel="apple-touch-icon" href="./icon.svg">
+              <style>
+                body { font-family: system-ui, sans-serif; margin: 0; min-height: 100vh; background: #eef4f0; color: #111c17; }
+                main { max-width: 760px; margin: 0 auto; padding: 76px 28px; display: grid; gap: 18px; }
+                h1 { margin: 0 0 34px; font-size: clamp(46px, 11vw, 68px); line-height: .98; }
+                a { display: block; padding: 22px; border-radius: 20px; background: white; color: #145c52; font-size: 26px; font-weight: 850; text-decoration: none; box-shadow: 0 16px 34px rgba(17, 28, 23, .09); }
+                small { display: block; margin-top: 8px; color: #617067; font-size: 14px; font-weight: 750; }
+              </style>
+            </head>
+            <body>
+              <main>
+                <h1>Playground Apps</h1>
+                <a href="../vocab-chat-app/">Vocab Chat<small>daily vocabulary and friend-style practice</small></a>
+                <a href="../sudoku-app/">Sudoku<small>soft mobile puzzle app</small></a>
               </main>
             </body>
           </html>

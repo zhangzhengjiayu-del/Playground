@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7efe7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Vocab Chat" />
+    <title>Vocab Chat</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="hero-art" aria-hidden="true">
+          <span class="phone-card one">rizz</span>
+          <span class="phone-card two">face card</span>
+          <span class="phone-card three">bestie?</span>
+        </div>
+        <p class="eyebrow">daily young English</p>
+        <h1>Vocab Chat</h1>
+        <p class="hero-copy">Learn useful words, then practise like you are texting a close friend.</p>
+      </header>
+
+      <section class="topic-panel" aria-label="Topic controls">
+        <label>
+          Topic
+          <select id="topicSelect"></select>
+        </label>
+        <label>
+          Chat mood
+          <select id="moodSelect">
+            <option value="bestie">bestie gossip</option>
+            <option value="casual">casual young people</option>
+            <option value="flirty">light crush talk</option>
+            <option value="study">study buddy</option>
+          </select>
+        </label>
+        <div class="topic-actions">
+          <button id="dailyBtn" class="primary-btn" type="button">Daily</button>
+          <button id="randomBtn" class="ghost-btn" type="button">Random</button>
+        </div>
+      </section>
+
+      <section class="today-card" aria-live="polite">
+        <div>
+          <p class="eyebrow">today's topic</p>
+          <h2 id="topicTitle"></h2>
+          <p id="topicVibe" class="muted"></p>
+        </div>
+        <span id="dailyBadge" class="pill"></span>
+      </section>
+
+      <section class="tabs" aria-label="Views">
+        <button id="wordsTab" class="tab-btn active" type="button">Words</button>
+        <button id="chatTab" class="tab-btn" type="button">Chat</button>
+        <button id="promptTab" class="tab-btn" type="button">AI Prompt</button>
+      </section>
+
+      <section id="wordsView" class="view active" aria-label="Vocabulary list">
+        <div id="wordList" class="word-list"></div>
+      </section>
+
+      <section id="chatView" class="view" aria-label="Practice chat">
+        <div id="starterList" class="starter-list"></div>
+        <div id="chatLog" class="chat-log" aria-live="polite"></div>
+        <div class="composer">
+          <textarea id="messageInput" placeholder="Type one sentence, like texting a friend..."></textarea>
+          <button id="sendBtn" class="primary-btn" type="button">Send</button>
+        </div>
+      </section>
+
+      <section id="promptView" class="view" aria-label="AI prompt builder">
+        <p class="prompt-copy">Copy this into ChatGPT or send it to me, and the conversation will follow today's topic.</p>
+        <textarea id="promptOutput" readonly></textarea>
+        <button id="copyPromptBtn" class="primary-btn block-btn" type="button">Copy prompt</button>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

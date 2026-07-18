@@ -1,6 +1,8 @@
 const STORAGE_KEY = 'advanced-sudoku-state-v1';
 const TOTAL_TIME_KEY = 'advanced-sudoku-total-seconds-v1';
 const COMPLETED_COUNT_KEY = 'advanced-sudoku-completed-count-v1';
+const LOCAL_UPDATED_AT_KEY = 'advanced-sudoku-updated-at-v1';
+const SYNC_ENDPOINT = '/api/sudoku-state';
 
 const DIFFICULTIES = {
   gentle: { label: 'Soft', givens: 46 },
@@ -60,6 +62,9 @@ let gameActive = false;
 let toastTimer;
 let totalSeconds = Number(localStorage.getItem(TOTAL_TIME_KEY) || '0');
 let completedCount = Number(localStorage.getItem(COMPLETED_COUNT_KEY) || '0');
+let localUpdatedAt = Number(localStorage.getItem(LOCAL_UPDATED_AT_KEY) || '0');
+let syncReady = false;
+let syncTimer;
 let lastTick = Date.now();
 let pendingNewDifficulty = null;
 
@@ -71,6 +76,7 @@ function init() {
   renderTip(state.tipIndex ?? randomInt(TIPS.length));
   bindEvents();
   showHome();
+  syncFromServer();
   setInterval(tickTimers, 1000);
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -501,6 +507,8 @@ function firstEmptyIndex(cells) {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  markSudokuUpdated();
+  queueServerSync();
 }
 
 function loadState() {
@@ -510,6 +518,71 @@ function loadState() {
     return saved;
   } catch {
     return null;
+  }
+}
+
+async function syncFromServer() {
+  try {
+    const response = await fetch(SYNC_ENDPOINT, { cache: 'no-store' });
+    if (!response.ok) return;
+    const shared = await response.json();
+    if (isValidSharedState(shared) && Number(shared.updatedAt || 0) > localUpdatedAt) {
+      state = hydrateState(shared.state);
+      totalSeconds = Number(shared.totalSeconds || 0);
+      completedCount = Number(shared.completedCount || 0);
+      localUpdatedAt = Number(shared.updatedAt || Date.now());
+      persistSudokuSnapshot(false);
+      selectedIndex = firstEmptyIndex(state.cells) ?? 0;
+      difficultySelect.value = state.difficulty;
+      render();
+      renderStats();
+      toast('Sudoku synced');
+    }
+  } catch {
+    // Offline or campus network tunneling can fail; local play still works.
+  } finally {
+    syncReady = true;
+    queueServerSync();
+  }
+}
+
+function isValidSharedState(shared) {
+  return Boolean(shared?.state?.cells?.length === 81 && shared?.state?.solution?.length === 81);
+}
+
+function markSudokuUpdated() {
+  localUpdatedAt = Date.now();
+  localStorage.setItem(LOCAL_UPDATED_AT_KEY, String(localUpdatedAt));
+}
+
+function persistSudokuSnapshot(updateTimestamp = true) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(TOTAL_TIME_KEY, String(totalSeconds));
+  localStorage.setItem(COMPLETED_COUNT_KEY, String(completedCount));
+  if (updateTimestamp) markSudokuUpdated();
+  else localStorage.setItem(LOCAL_UPDATED_AT_KEY, String(localUpdatedAt));
+}
+
+function queueServerSync() {
+  if (!syncReady) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(saveServerSnapshot, 350);
+}
+
+async function saveServerSnapshot() {
+  try {
+    await fetch(SYNC_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        state,
+        totalSeconds,
+        completedCount,
+        updatedAt: localUpdatedAt || Date.now()
+      })
+    });
+  } catch {
+    // Keep localStorage as the source of truth until the next successful sync.
   }
 }
 

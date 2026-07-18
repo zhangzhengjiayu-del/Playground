@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#eef4f0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Playground Apps" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Playground Apps</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header>
+        <p class="eyebrow">local apps</p>
+        <h1>Playground Apps</h1>
+      </header>
+
+      <section class="app-list" aria-label="Available apps">
+        <a class="app-card vocab" href="./vocab-chat/">
+          <span class="app-icon">Aa</span>
+          <span>
+            <strong>Vocab Chat</strong>
+            <small>daily vocabulary and friend-style practice</small>
+          </span>
+        </a>
+        <a class="app-card sudoku" href="./sudoku/">
+          <span class="app-icon">9</span>
+          <span>
+            <strong>Sudoku</strong>
+            <small>soft mobile puzzle app</small>
+          </span>
+        </a>
+      </section>
+    </main>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
