@@ -37,7 +37,9 @@ jobs:
         run: |
           mkdir -p _site
           cp -R sudoku-app _site/sudoku-app
+          cp -R sudoku-app _site/sudoku
           cp -R vocab-chat-app _site/vocab-chat-app
+          cp -R vocab-chat-app _site/vocab-chat
           cp -R course-deadline-tracker _site/deadline-tracker
           cp playground-apps/index.html _site/index.html
           cp playground-apps/styles.css _site/styles.css
