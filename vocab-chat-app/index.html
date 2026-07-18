@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7efe7" />
+    <meta name="theme-color" content="#edf2ed" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Vocab Chat" />
@@ -14,69 +14,66 @@
   </head>
   <body>
     <main class="app-shell">
-      <header class="hero">
-        <div class="hero-art" aria-hidden="true">
-          <span class="phone-card one">rizz</span>
-          <span class="phone-card two">face card</span>
-          <span class="phone-card three">bestie?</span>
+      <header class="app-header">
+        <a class="back-link" href="../" aria-label="Back to Playground Apps" title="Back to apps">←</a>
+        <img class="app-icon" src="./icon.svg" alt="" />
+        <div>
+          <h1>Vocab Chat</h1>
+          <p id="topicCount">64 topics</p>
         </div>
-        <p class="eyebrow">daily young English</p>
-        <h1>Vocab Chat</h1>
-        <p class="hero-copy">Learn useful words, then practise like you are texting a close friend.</p>
       </header>
 
-      <section class="topic-panel" aria-label="Topic controls">
+      <section class="controls" aria-label="Chat settings">
         <label>
-          Topic
+          <span>Topic</span>
           <select id="topicSelect"></select>
         </label>
         <label>
-          Chat mood
+          <span>Mood</span>
           <select id="moodSelect">
-            <option value="bestie">bestie gossip</option>
-            <option value="casual">casual young people</option>
+            <option value="small-talk">small talk</option>
+            <option value="bestie">bestie</option>
+            <option value="casual">casual</option>
+            <option value="gossip">gossip</option>
             <option value="flirty">light crush talk</option>
             <option value="study">study buddy</option>
           </select>
         </label>
-        <div class="topic-actions">
-          <button id="dailyBtn" class="primary-btn" type="button">Daily</button>
-          <button id="randomBtn" class="ghost-btn" type="button">Random</button>
-        </div>
+        <button id="dailyBtn" class="utility-btn" type="button">Today</button>
+        <button id="randomBtn" class="utility-btn" type="button">Random</button>
       </section>
 
-      <section class="today-card" aria-live="polite">
+      <section class="topic-summary" aria-live="polite">
         <div>
-          <p class="eyebrow">today's topic</p>
+          <p class="topic-kicker">Today's topic</p>
           <h2 id="topicTitle"></h2>
-          <p id="topicVibe" class="muted"></p>
+          <p id="topicVibe"></p>
         </div>
-        <span id="dailyBadge" class="pill"></span>
+        <span id="wordCount" class="word-count"></span>
       </section>
 
-      <section class="tabs" aria-label="Views">
-        <button id="wordsTab" class="tab-btn active" type="button">Words</button>
-        <button id="chatTab" class="tab-btn" type="button">Chat</button>
-        <button id="promptTab" class="tab-btn" type="button">AI Prompt</button>
-      </section>
+      <nav class="tabs" aria-label="Vocab Chat views">
+        <button id="chatTab" class="tab-btn active" type="button">Chat</button>
+        <button id="wordsTab" class="tab-btn" type="button">Words</button>
+      </nav>
 
-      <section id="wordsView" class="view active" aria-label="Vocabulary list">
-        <div id="wordList" class="word-list"></div>
-      </section>
-
-      <section id="chatView" class="view" aria-label="Practice chat">
-        <div id="starterList" class="starter-list"></div>
+      <section id="chatView" class="view active" aria-label="Chat with Mia">
+        <header class="chat-header">
+          <span class="friend-avatar" aria-hidden="true">M</span>
+          <div>
+            <strong>Mia</strong>
+            <span id="chatMoodLabel"></span>
+          </div>
+        </header>
         <div id="chatLog" class="chat-log" aria-live="polite"></div>
-        <div class="composer">
-          <textarea id="messageInput" placeholder="Type one sentence, like texting a friend..."></textarea>
-          <button id="sendBtn" class="primary-btn" type="button">Send</button>
-        </div>
+        <form id="composer" class="composer">
+          <textarea id="messageInput" rows="1" placeholder="Message Mia..." aria-label="Message Mia"></textarea>
+          <button id="sendBtn" class="send-btn" type="submit">Send</button>
+        </form>
       </section>
 
-      <section id="promptView" class="view" aria-label="AI prompt builder">
-        <p class="prompt-copy">Copy this into ChatGPT or send it to me, and the conversation will follow today's topic.</p>
-        <textarea id="promptOutput" readonly></textarea>
-        <button id="copyPromptBtn" class="primary-btn block-btn" type="button">Copy prompt</button>
+      <section id="wordsView" class="view" aria-label="Vocabulary list">
+        <div id="wordList" class="word-list"></div>
       </section>
     </main>
 

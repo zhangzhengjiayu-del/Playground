@@ -10,7 +10,9 @@ const sudokuStateFile = join(projectRoot, "sudoku-app", "sudoku-state.json");
 const port = Number(process.env.PORT || 5173);
 
 const roots = [
+  { prefix: "/vocab-chat-app", root: join(projectRoot, "vocab-chat-app") },
   { prefix: "/vocab-chat", root: join(projectRoot, "vocab-chat-app") },
+  { prefix: "/sudoku-app", root: join(projectRoot, "sudoku-app") },
   { prefix: "/sudoku", root: join(projectRoot, "sudoku-app") },
   { prefix: "", root: menuRoot },
 ];

@@ -1,4 +1,4 @@
-const CACHE_NAME = "playground-apps-v3";
+const CACHE_NAME = "playground-apps-v4";
 const ASSETS = ["./", "./index.html", "./styles.css", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

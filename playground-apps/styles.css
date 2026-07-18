@@ -1,15 +1,15 @@
 :root {
   color-scheme: light;
-  --bg: #eef4f0;
+  --bg: #f0f4f1;
   --panel: #ffffff;
-  --ink: #111c17;
-  --muted: #617067;
-  --line: #dfe8e2;
-  --green: #145c52;
-  --clay: #9a4d37;
-  --soft-clay: #f4dfd3;
-  --soft-green: #dfeee9;
-  --shadow: 0 16px 34px rgba(17, 28, 23, 0.09);
+  --ink: #17211b;
+  --muted: #68746d;
+  --line: #dce4de;
+  --green: #315b43;
+  --coral: #bf674f;
+  --soft-coral: #f8e4dc;
+  --soft-green: #deeee4;
+  --shadow: 0 7px 20px rgba(23, 33, 27, 0.07);
 }
 
 * {
@@ -19,90 +19,90 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 90% 0%, rgba(154, 77, 55, 0.1), transparent 28%),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .app-shell {
-  width: min(840px, 100%);
+  width: min(720px, 100%);
   margin: 0 auto;
-  padding: max(72px, calc(env(safe-area-inset-top) + 54px)) 28px max(32px, env(safe-area-inset-bottom));
+  padding: max(30px, calc(env(safe-area-inset-top) + 20px)) 18px max(24px, env(safe-area-inset-bottom));
+}
+
+.launcher-header {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
 }
 
 .eyebrow {
-  margin: 0 0 8px;
+  margin: 0;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 0;
-  text-transform: uppercase;
+  font-weight: 750;
 }
 
 h1 {
   margin: 0;
-  font-size: clamp(46px, 11vw, 68px);
-  line-height: 0.98;
-  letter-spacing: 0;
+  font-size: 28px;
+  line-height: 1.15;
 }
 
 .app-list {
   display: grid;
-  gap: 18px;
-  margin-top: 54px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .app-card {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 16px;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 10px;
   align-items: center;
-  min-height: 112px;
+  min-height: 88px;
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 8px;
   background: var(--panel);
   color: var(--green);
   box-shadow: var(--shadow);
-  padding: 20px;
+  padding: 13px;
   text-decoration: none;
 }
 
 .app-card:focus-visible {
-  outline: 4px solid rgba(20, 92, 82, 0.2);
-  outline-offset: 3px;
+  outline: 3px solid rgba(49, 91, 67, 0.22);
+  outline-offset: 2px;
 }
 
 .app-card strong {
   display: block;
-  font-size: 28px;
-  line-height: 1.05;
+  font-size: 16px;
+  line-height: 1.18;
 }
 
 .app-card small {
   display: block;
-  margin-top: 8px;
+  margin-top: 4px;
   color: var(--muted);
-  font-size: 14px;
-  font-weight: 750;
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 .app-icon {
   display: grid;
   place-items: center;
-  width: 58px;
-  height: 58px;
-  border-radius: 16px;
-  font-size: 24px;
-  font-weight: 900;
+  width: 42px;
+  height: 42px;
+  border-radius: 7px;
+  font-size: 17px;
+  font-weight: 850;
 }
 
 .vocab .app-icon {
-  background: var(--soft-clay);
-  color: var(--clay);
+  background: var(--soft-coral);
+  color: var(--coral);
 }
 
 .sudoku .app-icon {
@@ -110,19 +110,8 @@ h1 {
   color: var(--green);
 }
 
-@media (max-width: 520px) {
-  .app-shell {
-    padding-left: 26px;
-    padding-right: 26px;
-  }
-
-  .app-card {
-    min-height: 104px;
-    border-radius: 18px;
-    padding: 18px;
-  }
-
-  .app-card strong {
-    font-size: 25px;
+@media (max-width: 460px) {
+  .app-list {
+    grid-template-columns: 1fr;
   }
 }
